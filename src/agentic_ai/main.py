@@ -1,11 +1,16 @@
 """Main entry point for the Agentic AI application."""
 
 import sys
+import os
 import logging
 from typing import Optional
 
-from .gui import main as gui_main
-from .cli import main as cli_main
+# Add the root directory to the Python path
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
+
+# Now we can import from the project root
+from src.agentic_ai.gui import main as gui_main
+from src.agentic_ai.cli import main as cli_main
 from src.utils.logger import setup_logger
 
 def main(argv: Optional[list[str]] = None) -> int:

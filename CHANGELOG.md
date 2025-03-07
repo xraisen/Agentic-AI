@@ -5,6 +5,34 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.1] - 2024-03-07
+
+### Fixed
+- Import errors in src/agentic_ai/main.py that prevented application startup
+- Missing version property in pyproject.toml
+- DLL loading issues with PyQt6 components
+- Icon handling during Windows application build
+- GitHub repository URLs throughout the codebase
+
+### Added
+- Improved error handling in build scripts
+- Better diagnostic logging during build process
+- Dependency checks before building components
+- Automated detection of build tool requirements
+- Path handling for consistent module imports
+
+### Changed
+- Enhanced Chrome extension build process with validation steps
+- Improved VS Code extension build with npm and Node.js detection
+- Updated Windows application build with debugging flags
+- Better configuration for cross-platform compatibility
+- Ensured log directories exist before writing logs
+
+### Security
+- Addressed potential path traversal issues
+- Fixed insecure file handling in build scripts
+- Improved error logging to prevent information leakage
+
 ## [1.0.0] - 2024-03-19
 
 ### Added
