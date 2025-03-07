@@ -1,0 +1,172 @@
+# Auto detect text files and perform LF normalization
+* text=auto
+
+# Python files
+*.py text diff=python
+*.pyw text diff=python
+*.pyi text diff=python
+*.pyx text diff=python
+*.pxd text diff=python
+*.pxi text diff=python
+*.pyd binary
+*.so binary
+*.egg binary
+*.egg-info text
+*.whl binary
+*.zip binary
+*.tar binary
+*.gz binary
+*.rar binary
+*.7z binary
+*.bz2 binary
+*.xz binary
+
+# Documentation
+*.md text diff=markdown
+*.rst text
+*.txt text
+*.pdf binary
+*.doc binary
+*.docx binary
+*.xls binary
+*.xlsx binary
+*.ppt binary
+*.pptx binary
+*.odt binary
+*.ods binary
+*.odp binary
+
+# Configuration files
+*.json text
+*.yaml text
+*.yml text
+*.ini text
+*.cfg text
+*.conf text
+*.config text
+*.xml text
+*.toml text
+*.properties text
+*.env text
+*.env.* text
+
+# Web files
+*.html text diff=html
+*.htm text diff=html
+*.css text diff=css
+*.js text
+*.ts text
+*.tsx text
+*.jsx text
+*.svg text
+*.ico binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.eot binary
+*.otf binary
+
+# Scripts
+*.sh text eol=lf
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+*.vbs text eol=crlf
+
+# Database
+*.sql text
+*.sqlite binary
+*.db binary
+
+# IDE and editor files
+.vscode/* text
+.idea/* text
+*.swp text
+*.swo text
+*~ text
+*.bak text
+*.tmp text
+*.temp text
+*.log text
+*.cache text
+
+# Project specific
+config.json text
+*.key text
+*.pem text
+*.cert text
+*.crt text
+*.p12 text
+*.pfx text
+*.dmg binary
+*.exe binary
+*.msi binary
+*.app binary
+*.ipa binary
+*.apk binary
+
+# Git files
+.gitattributes text
+.gitignore text
+.gitconfig text
+
+# Build and distribution
+dist/* binary
+build/* binary
+*.egg-info/* text
+*.egg binary
+*.whl binary
+*.tar.gz binary
+*.zip binary
+*.rar binary
+*.7z binary
+
+# Virtual environment
+venv/* binary
+env/* binary
+.env/* text
+.venv/* binary
+
+# Test files
+tests/* text
+test_*.py text
+*_test.py text
+*.test.js text
+*.spec.js text
+*.test.ts text
+*.spec.ts text
+
+# Documentation
+docs/* text
+*.md text
+*.rst text
+*.txt text
+
+# Source code
+src/* text
+*.py text
+*.js text
+*.ts text
+*.jsx text
+*.tsx text
+*.css text
+*.scss text
+*.sass text
+*.less text
+*.html text
+*.xml text
+*.json text
+*.yaml text
+*.yml text
+*.ini text
+*.cfg text
+*.conf text
+*.config text
+*.properties text
+*.env text
+*.env.* text 

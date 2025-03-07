@@ -4,7 +4,7 @@
     "description": "AI-powered development assistant",
     "version": "0.0.1",
     "engines": {
-        "vscode": "^1.85.0"
+        "vscode": "^1.98.0"
     },
     "categories": [
         "Other"
@@ -30,16 +30,16 @@
         "test": "node ./out/test/runTest.js"
     },
     "devDependencies": {
-        "@types/vscode": "^1.85.0",
         "@types/glob": "^8.1.0",
-        "@types/mocha": "^10.0.6",
-        "@types/node": "20.x",
+        "@types/mocha": "^10.0.10",
+        "@types/node": "^20.17.23",
+        "@types/vscode": "^1.98.0",
         "@typescript-eslint/eslint-plugin": "^6.15.0",
         "@typescript-eslint/parser": "^6.15.0",
+        "@vscode/test-electron": "^2.3.8",
         "eslint": "^8.56.0",
         "glob": "^8.1.0",
         "mocha": "^10.2.0",
-        "typescript": "^4.9.5",
-        "@vscode/test-electron": "^2.3.8"
+        "typescript": "^4.9.5"
     }
-} 
+}

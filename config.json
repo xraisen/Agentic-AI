@@ -1,7 +1,11 @@
-# config.json (Separate configuration file)
 {
-  "OPENROUTER_API_KEY": "",
-  "SITE_URL": "https://agentic-ai.vercel.app/",
-  "SITE_NAME": "Agentic AI",
-  "MODEL": "google/gemini-2.0-flash-thinking-exp:free"
+    "OPENROUTER_API_KEY": "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",
+    "MODEL": "google/gemini-pro",
+    "SITE_URL": "http://localhost:3000",
+    "SITE_NAME": "Agentic AI Local",
+    "LOG_LEVEL": "DEBUG",
+    "MAX_TOKENS": 1000,
+    "TEMPERATURE": 0.7,
+    "CACHE_DIR": "cache",
+    "ASSETS_DIR": "assets"
 }

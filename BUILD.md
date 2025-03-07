@@ -38,7 +38,7 @@ Before building, ensure the following assets are present in the `assets` directo
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/agentic-ai.git
+git clone https://github.com/xraisen/agentic-ai.git
 cd agentic-ai
 ```
 
@@ -190,7 +190,7 @@ python build.py --skip-tests
 
 1. Check the logs in `logs/` directory
 2. Review test results in `test_results/`
-3. Check the [GitHub Issues](https://github.com/yourusername/agentic-ai/issues)
+3. Check the [GitHub Issues](https://github.com/xraisen/agentic-ai/issues)
 4. Join the [Discord community](https://discord.gg/your-server)
 
 ## Contributing

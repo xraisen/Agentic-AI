@@ -1,0 +1,12 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Agentic AI
+Comment=AI Assistant Platform
+Exec=agentic-ai-gui
+Icon=agentic-ai
+Terminal=false
+Categories=Utility;Development;
+Keywords=ai;assistant;automation;productivity;development;
+StartupNotify=true
+StartupWMClass=AgenticAI 

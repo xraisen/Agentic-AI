@@ -1,81 +1,168 @@
 # Agentic AI
 
-A fully functional, free, and open-source AI assistant application designed for local execution and comprehensive system integration.
-
-## Overview
-
-Agentic AI is a cross-platform AI assistant that runs locally on your system, providing natural language processing capabilities, system integration, task automation, and voice interaction features.
+A powerful AI assistant platform that seamlessly integrates across Windows, macOS, VS Code, and Chrome.
 
 ## Features
 
-- Natural Language Processing (NLP) with multilingual support
-- System integration and resource control
-- Task automation with customizable scripts
-- Conversation management with intelligent caching
-- Performance optimization with async/await
-- Customizable interface and settings
-- Voice interaction capabilities
-- Cross-platform support (Windows, macOS, VS Code Extension)
+- **Cross-Platform Support**
+  - Windows desktop application
+  - macOS desktop application
+  - VS Code extension
+  - Chrome extension
+
+- **AI Capabilities**
+  - Text generation and analysis
+  - Code completion and explanation
+  - Image analysis
+  - Natural language processing
+  - Multi-model support
+
+- **Integration Features**
+  - Seamless cross-platform synchronization
+  - Global hotkeys
+  - Context-aware assistance
+  - Customizable settings
 
 ## Installation
 
-### Prerequisites
+### Desktop Applications
 
-- Python 3.9 or higher
-- Git
+#### Windows
+1. Download the latest Windows installer from the releases page
+2. Run the installer and follow the setup wizard
+3. Launch Agentic AI from the Start menu or desktop shortcut
 
-### Setup
+#### macOS
+1. Download the latest DMG file from the releases page
+2. Open the DMG file and drag Agentic AI to Applications
+3. Launch Agentic AI from Applications or Spotlight
 
-1. Clone the repository:
-```bash
-git clone https://github.com/yourusername/agentic-ai.git
-cd agentic-ai
-```
+### Extensions
 
-2. Create a virtual environment:
-```bash
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-```
+#### VS Code
+1. Open VS Code
+2. Go to the Extensions view (Ctrl+Shift+X)
+3. Search for "Agentic AI"
+4. Click Install
 
-3. Install dependencies:
-```bash
-pip install -r requirements.txt
-```
+#### Chrome
+1. Download the Chrome extension from the releases page
+2. Open Chrome and go to chrome://extensions/
+3. Enable Developer mode
+4. Click "Load unpacked" and select the extension directory
 
-4. Configure the application:
-- Copy `config.example.json` to `config.json`
-- Update the configuration with your settings
+## Configuration
 
-## Usage
+### API Keys
+1. Get your API keys from:
+   - OpenRouter: https://openrouter.ai/
+   - Direct API: Configure in settings
+2. Add your API keys to the configuration file or environment variables
 
-1. Start the application:
-```bash
-python src/main.py
-```
+### Settings
+The application can be configured through:
+- GUI settings panel
+- Configuration file (`config.json`)
+- Environment variables
 
-2. For VS Code extension:
-- Install the extension from the VS Code marketplace
-- Use the command palette (Ctrl+Shift+P) and type "Agentic AI"
+See [CONFIGURATION.md](CONFIGURATION.md) for detailed settings documentation.
 
 ## Development
 
-### Project Structure
+### Prerequisites
+- Python 3.8 or higher
+- Node.js 14 or higher
+- Git
+
+### Setup
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/xraisen/agentic-ai.git
+   cd agentic-ai
+   ```
+
+2. Create a virtual environment:
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   ```
+
+3. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. Install development dependencies:
+   ```bash
+   pip install -r requirements-dev.txt
+   ```
+
+### Building
+
+#### Desktop Applications
+```bash
+# Build for current platform
+python build.py
+
+# Build for specific platform
+python build.py --platform windows
+python build.py --platform mac
+```
+
+#### Extensions
+```bash
+# Build VS Code extension
+cd .vscode
+npm install
+npm run compile
+vsce package
+
+# Build Chrome extension
+python build.py --platform chrome
+```
+
+### Testing
+```bash
+# Run all tests
+pytest
+
+# Run specific test category
+pytest tests/test_api.py
+pytest tests/test_ui.py
+```
+
+### Code Style
+```bash
+# Format code
+black .
+isort .
+
+# Type checking
+mypy .
+
+# Linting
+flake8
+```
+
+## Project Structure
 
 ```
 agentic-ai/
-├── src/
-│   ├── core/           # Core functionality
-│   ├── gui/            # GUI components
-│   ├── plugins/        # Plugin system
-│   └── utils/          # Utility functions
-├── docs/              # Documentation
-├── tests/             # Test files
-├── logs/              # Application logs
-└── requirements.txt   # Python dependencies
+├── src/                    # Source code
+│   ├── main.py            # Main application entry
+│   ├── ui/                # UI components
+│   ├── api/               # API integration
+│   └── utils/             # Utility functions
+├── tests/                 # Test files
+├── assets/               # Application assets
+├── .vscode/              # VS Code extension
+├── chrome/               # Chrome extension
+├── build.py              # Build script
+├── requirements.txt      # Python dependencies
+└── README.md            # This file
 ```
 
-### Contributing
+## Contributing
 
 1. Fork the repository
 2. Create a feature branch
@@ -89,6 +176,12 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Acknowledgments
 
-- Gemini 2.0 Flash Thinking Experimental 01-21 (free) from OpenRouter
-- PyQt6 for the GUI framework
-- All contributors and maintainers 
+- Thanks to all contributors
+- Built with [PyQt6](https://www.riverbankcomputing.com/software/pyqt/)
+- Powered by various AI models and APIs
+
+## Support
+
+- Documentation: [docs/](docs/)
+- Issues: [GitHub Issues](https://github.com/xraisen/agentic-ai/issues)
+- Community: [Discussions](https://github.com/xraisen/agentic-ai/discussions) 

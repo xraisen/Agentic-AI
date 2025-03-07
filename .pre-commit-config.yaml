@@ -1,0 +1,234 @@
+repos:
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+    -   id: trailing-whitespace
+    -   id: end-of-file-fixer
+    -   id: check-yaml
+    -   id: check-added-large-files
+    -   id: check-ast
+    -   id: check-json
+    -   id: check-merge-conflict
+    -   id: detect-private-key
+
+-   repo: https://github.com/psf/black
+    rev: 23.3.0
+    hooks:
+    -   id: black
+        language_version: python3
+
+-   repo: https://github.com/pycqa/isort
+    rev: 5.12.0
+    hooks:
+    -   id: isort
+        args: ["--profile", "black"]
+
+-   repo: https://github.com/pycqa/flake8
+    rev: 6.0.0
+    hooks:
+    -   id: flake8
+        additional_dependencies: [
+            'flake8-docstrings',
+            'flake8-bugbear',
+            'flake8-comprehensions',
+            'flake8-simplify',
+            'flake8-unused-arguments',
+            'flake8-return',
+            'flake8-print',
+            'flake8-raise',
+            'flake8-multiline-containers',
+            'flake8-commas',
+            'flake8-quotes',
+            'flake8-import-order',
+            'flake8-annotations',
+            'flake8-broken-line',
+            'flake8-builtins',
+            'flake8-class-newline',
+            'flake8-cognitive-complexity',
+            'flake8-comprehensions',
+            'flake8-datetimez',
+            'flake8-debugger',
+            'flake8-docstrings',
+            'flake8-dunder-all',
+            'flake8-encodings',
+            'flake8-executable',
+            'flake8-expression-complexity',
+            'flake8-fixme',
+            'flake8-future-annotations',
+            'flake8-if-expr',
+            'flake8-implicit-str-concat',
+            'flake8-import-conventions',
+            'flake8-import-order',
+            'flake8-json',
+            'flake8-logging-format',
+            'flake8-mutable',
+            'flake8-mypy',
+            'flake8-no-pep420',
+            'flake8-pie',
+            'flake8-pyi',
+            'flake8-pytest-style',
+            'flake8-pyi',
+            'flake8-raise',
+            'flake8-return',
+            'flake8-self',
+            'flake8-simplify',
+            'flake8-slots',
+            'flake8-spellcheck',
+            'flake8-super',
+            'flake8-tidy-imports',
+            'flake8-todos',
+            'flake8-type-annotations',
+            'flake8-unused-arguments',
+            'flake8-use-fstring',
+            'flake8-variables-names',
+            'flake8-walrus',
+        ]
+
+-   repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.3.0
+    hooks:
+    -   id: mypy
+        additional_dependencies: [
+            'types-requests',
+            'types-python-dateutil',
+            'types-setuptools',
+        ]
+
+-   repo: https://github.com/PyCQA/bandit
+    rev: 1.7.4
+    hooks:
+    -   id: bandit
+        args: ["-c", "pyproject.toml"]
+        additional_dependencies: ['bandit[toml]']
+
+-   repo: https://github.com/asottile/pyupgrade
+    rev: v3.3.1
+    hooks:
+    -   id: pyupgrade
+        args: [--py38-plus]
+
+-   repo: https://github.com/asottile/yesqa
+    rev: v1.3.0
+    hooks:
+    -   id: yesqa
+
+-   repo: https://github.com/asottile/add-trailing-comma
+    rev: v2.2.3
+    hooks:
+    -   id: add-trailing-comma
+
+-   repo: https://github.com/asottile/reorder_python_imports
+    rev: v3.8.0
+    hooks:
+    -   id: reorder-python-imports
+
+-   repo: https://github.com/asottile/autoupdate-conda
+    rev: v1.0.0
+    hooks:
+    -   id: autoupdate-conda
+
+-   repo: https://github.com/asottile/check-jsonschema
+    rev: 0.24.0
+    hooks:
+    -   id: check-jsonschema
+
+-   repo: https://github.com/asottile/check-toml
+    rev: v1.0.0
+    hooks:
+    -   id: check-toml
+
+-   repo: https://github.com/asottile/check-yaml
+    rev: v1.0.4
+    hooks:
+    -   id: check-yaml
+
+-   repo: https://github.com/asottile/check-case-conflict
+    rev: v2.0.0
+    hooks:
+    -   id: check-case-conflict
+
+-   repo: https://github.com/asottile/check-docstring-first
+    rev: v0.3.0
+    hooks:
+    -   id: check-docstring-first
+
+-   repo: https://github.com/asottile/check-executables-have-shebangs
+    rev: v0.1.0
+    hooks:
+    -   id: check-executables-have-shebangs
+
+-   repo: https://github.com/asottile/check-merge-conflict
+    rev: v2.0.0
+    hooks:
+    -   id: check-merge-conflict
+
+-   repo: https://github.com/asottile/check-shebang-scripts-are-executable
+    rev: v0.1.0
+    hooks:
+    -   id: check-shebang-scripts-are-executable
+
+-   repo: https://github.com/asottile/check-symlinks
+    rev: v1.0.0
+    hooks:
+    -   id: check-symlinks
+
+-   repo: https://github.com/asottile/check-xml
+    rev: v1.0.0
+    hooks:
+    -   id: check-xml
+
+-   repo: https://github.com/asottile/dead
+    rev: v1.0.0
+    hooks:
+    -   id: dead
+
+-   repo: https://github.com/asottile/detect-private-key
+    rev: v1.0.0
+    hooks:
+    -   id: detect-private-key
+
+-   repo: https://github.com/asottile/end-of-file-fixer
+    rev: v1.0.0
+    hooks:
+    -   id: end-of-file-fixer
+
+-   repo: https://github.com/asottile/fix-encoding-pragma
+    rev: v1.0.0
+    hooks:
+    -   id: fix-encoding-pragma
+
+-   repo: https://github.com/asottile/mixed-line-ending
+    rev: v1.0.0
+    hooks:
+    -   id: mixed-line-ending
+
+-   repo: https://github.com/asottile/pyupgrade
+    rev: v3.3.1
+    hooks:
+    -   id: pyupgrade
+        args: [--py38-plus]
+
+-   repo: https://github.com/asottile/requirements-txt-fixer
+    rev: v1.0.0
+    hooks:
+    -   id: requirements-txt-fixer
+
+-   repo: https://github.com/asottile/setup-cfg-fmt
+    rev: v2.0.0
+    hooks:
+    -   id: setup-cfg-fmt
+
+-   repo: https://github.com/asottile/sort-simple-yaml
+    rev: v1.0.0
+    hooks:
+    -   id: sort-simple-yaml
+
+-   repo: https://github.com/asottile/trailing-whitespace-fixer
+    rev: v1.0.0
+    hooks:
+    -   id: trailing-whitespace-fixer
+
+-   repo: https://github.com/asottile/yesqa
+    rev: v1.3.0
+    hooks:
+    -   id: yesqa 

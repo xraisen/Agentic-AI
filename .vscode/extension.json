@@ -1,33 +1,79 @@
 {
     "name": "agentic-ai",
     "displayName": "Agentic AI",
-    "description": "A powerful AI assistant for VS Code",
-    "version": "0.1.0",
+    "description": "AI-powered code completion, explanation, and refactoring",
+    "version": "1.0.0",
     "engines": {
-        "vscode": "^1.85.0"
+        "vscode": "^1.80.0"
     },
     "categories": [
         "Other"
     ],
     "activationEvents": [
-        "onCommand:agentic-ai.start",
-        "onCommand:agentic-ai.stop",
-        "onCommand:agentic-ai.clear"
+        "onLanguage:python",
+        "onLanguage:javascript",
+        "onLanguage:typescript",
+        "onLanguage:java",
+        "onLanguage:cpp",
+        "onLanguage:csharp",
+        "onLanguage:go",
+        "onLanguage:rust",
+        "onLanguage:php",
+        "onLanguage:ruby",
+        "onLanguage:swift",
+        "onLanguage:kotlin",
+        "onLanguage:scala",
+        "onLanguage:r",
+        "onLanguage:matlab",
+        "onLanguage:julia",
+        "onLanguage:lua",
+        "onLanguage:perl",
+        "onLanguage:haskell",
+        "onLanguage:elixir",
+        "onLanguage:clojure",
+        "onLanguage:erlang",
+        "onLanguage:ocaml",
+        "onLanguage:fsharp",
+        "onLanguage:racket",
+        "onLanguage:scheme",
+        "onLanguage:prolog",
+        "onLanguage:fortran",
+        "onLanguage:ada",
+        "onLanguage:assembly",
+        "onLanguage:shellscript",
+        "onLanguage:powershell",
+        "onLanguage:batch",
+        "onLanguage:makefile",
+        "onLanguage:cmake",
+        "onLanguage:dockerfile",
+        "onLanguage:yaml",
+        "onLanguage:json",
+        "onLanguage:xml",
+        "onLanguage:html",
+        "onLanguage:css",
+        "onLanguage:scss",
+        "onLanguage:less",
+        "onLanguage:markdown",
+        "onLanguage:plaintext"
     ],
     "main": "./out/extension.js",
     "contributes": {
         "commands": [
             {
-                "command": "agentic-ai.start",
-                "title": "Start Agentic AI"
+                "command": "agentic-ai.complete",
+                "title": "Agentic AI: Complete Code"
             },
             {
-                "command": "agentic-ai.stop",
-                "title": "Stop Agentic AI"
+                "command": "agentic-ai.explain",
+                "title": "Agentic AI: Explain Code"
             },
             {
-                "command": "agentic-ai.clear",
-                "title": "Clear Agentic AI Chat"
+                "command": "agentic-ai.refactor",
+                "title": "Agentic AI: Refactor Code"
+            },
+            {
+                "command": "agentic-ai.settings",
+                "title": "Agentic AI: Open Settings"
             }
         ],
         "configuration": {
@@ -40,10 +86,106 @@
                 },
                 "agentic-ai.model": {
                     "type": "string",
-                    "default": "google/gemini-2.0-flash-thinking-exp:free",
-                    "description": "AI Model to use"
+                    "default": "google/gemini-pro",
+                    "description": "AI Model to use",
+                    "enum": [
+                        "google/gemini-pro",
+                        "google/gemini-pro-vision",
+                        "anthropic/claude-2",
+                        "anthropic/claude-instant-1",
+                        "meta-llama/codellama-34b",
+                        "meta-llama/codellama-13b",
+                        "meta-llama/codellama-7b",
+                        "openai/gpt-4",
+                        "openai/gpt-4-32k",
+                        "openai/gpt-3.5-turbo"
+                    ]
+                },
+                "agentic-ai.temperature": {
+                    "type": "number",
+                    "default": 0.7,
+                    "description": "AI Temperature (0.0 to 1.0)",
+                    "minimum": 0.0,
+                    "maximum": 1.0
+                },
+                "agentic-ai.maxTokens": {
+                    "type": "number",
+                    "default": 2048,
+                    "description": "Maximum tokens for AI response",
+                    "minimum": 1,
+                    "maximum": 4096
+                },
+                "agentic-ai.enableCompletion": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Enable code completion"
+                },
+                "agentic-ai.enableExplanation": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Enable code explanation"
+                },
+                "agentic-ai.enableRefactoring": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Enable code refactoring"
+                },
+                "agentic-ai.completionTriggerCharacters": {
+                    "type": "array",
+                    "default": [".", "(", "[", "{", " ", "\t", "\n"],
+                    "description": "Characters that trigger code completion"
+                },
+                "agentic-ai.explanationTriggerCharacters": {
+                    "type": "array",
+                    "default": ["//", "/*", "#", "--"],
+                    "description": "Characters that trigger code explanation"
+                },
+                "agentic-ai.refactoringTriggerCharacters": {
+                    "type": "array",
+                    "default": ["//", "/*", "#", "--"],
+                    "description": "Characters that trigger code refactoring"
+                },
+                "agentic-ai.logLevel": {
+                    "type": "string",
+                    "default": "info",
+                    "description": "Logging level",
+                    "enum": ["debug", "info", "warning", "error"]
                 }
             }
+        },
+        "keybindings": [
+            {
+                "command": "agentic-ai.complete",
+                "key": "ctrl+space",
+                "mac": "cmd+space",
+                "when": "editorHasCompletionItemProvider && editorTextFocus && !editorReadonly"
+            },
+            {
+                "command": "agentic-ai.explain",
+                "key": "ctrl+shift+e",
+                "mac": "cmd+shift+e",
+                "when": "editorTextFocus && !editorReadonly"
+            },
+            {
+                "command": "agentic-ai.refactor",
+                "key": "ctrl+shift+r",
+                "mac": "cmd+shift+r",
+                "when": "editorTextFocus && !editorReadonly"
+            }
+        ],
+        "menus": {
+            "editor/context": [
+                {
+                    "command": "agentic-ai.explain",
+                    "group": "navigation",
+                    "when": "editorTextFocus && !editorReadonly"
+                },
+                {
+                    "command": "agentic-ai.refactor",
+                    "group": "navigation",
+                    "when": "editorTextFocus && !editorReadonly"
+                }
+            ]
         }
     },
     "scripts": {
@@ -55,13 +197,16 @@
         "test": "node ./out/test/runTest.js"
     },
     "devDependencies": {
-        "@types/vscode": "^1.85.0",
-        "@types/node": "18.x",
-        "@typescript-eslint/eslint-plugin": "^6.15.0",
-        "@typescript-eslint/parser": "^6.15.0",
-        "eslint": "^8.56.0",
-        "typescript": "^5.3.3",
-        "glob": "^10.3.10",
-        "mocha": "^10.2.0"
+        "@types/vscode": "^1.80.0",
+        "@types/node": "^16.11.7",
+        "@typescript-eslint/eslint-plugin": "^5.42.0",
+        "@typescript-eslint/parser": "^5.42.0",
+        "eslint": "^8.26.0",
+        "typescript": "^4.8.4",
+        "mocha": "^10.1.0"
+    },
+    "dependencies": {
+        "axios": "^1.3.4",
+        "crypto-js": "^4.1.1"
     }
 } 

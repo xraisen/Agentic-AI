@@ -55,13 +55,20 @@
         "test": "node ./out/test/runTest.js"
     },
     "devDependencies": {
-        "@types/vscode": "^1.85.0",
+        "@types/crypto-js": "^4.2.2",
         "@types/node": "18.x",
+        "@types/vscode": "^1.85.0",
         "@typescript-eslint/eslint-plugin": "^6.15.0",
         "@typescript-eslint/parser": "^6.15.0",
         "eslint": "^8.56.0",
-        "typescript": "^5.3.3",
-        "glob": "^10.3.10",
-        "mocha": "^10.2.0"
+        "glob": "^10.4.5",
+        "mocha": "^10.2.0",
+        "typescript": "^5.3.3"
+    },
+    "dependencies": {
+        "@types/mocha": "^10.0.10",
+        "@vscode/test-electron": "^2.4.1",
+        "axios": "^1.8.2",
+        "crypto-js": "^4.2.0"
     }
-} 
+}

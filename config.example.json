@@ -1,0 +1,11 @@
+{
+    "OPENROUTER_API_KEY": "your-api-key-here",
+    "MODEL": "gemini-2.0-flash-thinking-experimental-01-21",
+    "SITE_URL": "https://github.com/xraisen/agentic-ai",
+    "SITE_NAME": "Agentic AI",
+    "LOG_LEVEL": "INFO",
+    "MAX_TOKENS": 1000,
+    "TEMPERATURE": 0.7,
+    "CACHE_DIR": "cache",
+    "ASSETS_DIR": "assets"
+} 

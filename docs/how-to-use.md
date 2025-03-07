@@ -5,7 +5,7 @@
 ### Installation
 
 1. **Download the Application**
-   - Visit the [releases page](https://github.com/yourusername/agentic-ai/releases)
+   - Visit the [releases page](https://github.com/xraisen/agentic-ai/releases)
    - Download the appropriate installer for your system (Windows/macOS)
    - For VS Code users, install the extension from the marketplace
 
@@ -129,11 +129,11 @@
 1. **Documentation**
    - Check the [knowledgebase](knowledgebase.md)
    - Read the [FAQ](faq.md)
-   - Visit the [GitHub wiki](https://github.com/yourusername/agentic-ai/wiki)
+   - Visit the [GitHub wiki](https://github.com/xraisen/agentic-ai/wiki)
 
 2. **Community Support**
    - Join the [Discord server](https://discord.gg/your-server)
-   - Post on [GitHub issues](https://github.com/yourusername/agentic-ai/issues)
+   - Post on [GitHub issues](https://github.com/xraisen/agentic-ai/issues)
    - Check [Stack Overflow](https://stackoverflow.com/questions/tagged/agentic-ai)
 
 ## Best Practices
