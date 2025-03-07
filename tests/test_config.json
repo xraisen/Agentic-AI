@@ -1,0 +1,24 @@
+{
+    "api_key": "test_key",
+    "model": "gpt-4",
+    "max_tokens": 1000,
+    "temperature": 0.7,
+    "plugins": ["weather"],
+    "history_size": 10,
+    "timeout": 30,
+    "retry_attempts": 3,
+    "log_level": "DEBUG",
+    "cache_enabled": true,
+    "cache_ttl": 3600,
+    "security": {
+        "input_sanitization": true,
+        "api_key_masking": true,
+        "rate_limiting": true,
+        "max_requests_per_minute": 60
+    },
+    "performance": {
+        "concurrent_requests": 5,
+        "request_timeout": 30,
+        "connection_pool_size": 10
+    }
+} 

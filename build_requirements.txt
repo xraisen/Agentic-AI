@@ -1,0 +1,25 @@
+# Build tools
+pyinstaller>=6.3.0
+
+# Testing
+pytest>=7.4.3
+pytest-asyncio>=0.23.2
+pytest-cov>=4.1.0
+
+# Development
+black>=23.12.1
+flake8>=7.0.0
+mypy>=1.8.0
+isort>=5.13.2
+
+# Documentation
+sphinx>=7.2.6
+sphinx-rtd-theme>=2.0.0
+
+# Packaging
+wheel>=0.42.0
+twine>=4.0.2
+build>=1.0.3
+
+# macOS specific
+dmgbuild>=1.6.0; platform_system == "Darwin" 

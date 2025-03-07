@@ -1,0 +1,40 @@
+[run]
+source = src
+omit = 
+    */tests/*
+    */venv/*
+    */__init__.py
+    */setup.py
+    */build.py
+    */dist/*
+    */build/*
+    */logs/*
+    */test_results/*
+    */test_reports/*
+
+[report]
+exclude_lines =
+    pragma: no cover
+    def __repr__
+    raise NotImplementedError
+    if __name__ == .__main__.:
+    pass
+    raise ImportError
+    except ImportError:
+    raise NotImplementedError
+    if TYPE_CHECKING:
+    @abstractmethod
+    @property
+    @classmethod
+    @staticmethod
+
+[html]
+directory = coverage_html
+
+[xml]
+output = coverage.xml
+
+[coverage:run]
+branch = True
+parallel = True
+data_file = .coverage 

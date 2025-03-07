@@ -1,0 +1,14 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "npm",
+			"script": "watch",
+			"path": ".vscode",
+			"group": "build",
+			"problemMatcher": [],
+			"label": "npm: watch - .vscode",
+			"detail": "tsc -watch -p ./"
+		}
+	]
+}

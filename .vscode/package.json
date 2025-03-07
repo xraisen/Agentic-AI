@@ -1,0 +1,67 @@
+{
+    "name": "agentic-ai",
+    "displayName": "Agentic AI",
+    "description": "A powerful AI assistant for VS Code",
+    "version": "0.1.0",
+    "engines": {
+        "vscode": "^1.85.0"
+    },
+    "categories": [
+        "Other"
+    ],
+    "activationEvents": [
+        "onCommand:agentic-ai.start",
+        "onCommand:agentic-ai.stop",
+        "onCommand:agentic-ai.clear"
+    ],
+    "main": "./out/extension.js",
+    "contributes": {
+        "commands": [
+            {
+                "command": "agentic-ai.start",
+                "title": "Start Agentic AI"
+            },
+            {
+                "command": "agentic-ai.stop",
+                "title": "Stop Agentic AI"
+            },
+            {
+                "command": "agentic-ai.clear",
+                "title": "Clear Agentic AI Chat"
+            }
+        ],
+        "configuration": {
+            "title": "Agentic AI",
+            "properties": {
+                "agentic-ai.apiKey": {
+                    "type": "string",
+                    "default": "",
+                    "description": "OpenRouter API Key"
+                },
+                "agentic-ai.model": {
+                    "type": "string",
+                    "default": "google/gemini-2.0-flash-thinking-exp:free",
+                    "description": "AI Model to use"
+                }
+            }
+        }
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./",
+        "pretest": "npm run compile && npm run lint",
+        "lint": "eslint src --ext ts",
+        "test": "node ./out/test/runTest.js"
+    },
+    "devDependencies": {
+        "@types/vscode": "^1.85.0",
+        "@types/node": "18.x",
+        "@typescript-eslint/eslint-plugin": "^6.15.0",
+        "@typescript-eslint/parser": "^6.15.0",
+        "eslint": "^8.56.0",
+        "typescript": "^5.3.3",
+        "glob": "^10.3.10",
+        "mocha": "^10.2.0"
+    }
+} 

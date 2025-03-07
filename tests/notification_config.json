@@ -1,0 +1,22 @@
+{
+    "email": {
+        "enabled": false,
+        "smtp_server": "",
+        "smtp_port": 587,
+        "username": "",
+        "password": "",
+        "from_address": "",
+        "to_addresses": []
+    },
+    "slack": {
+        "enabled": false,
+        "webhook_url": "",
+        "channel": ""
+    },
+    "thresholds": {
+        "test_pass_rate": 80,
+        "coverage": 80,
+        "performance_score": 80,
+        "security_score": 80
+    }
+} 
