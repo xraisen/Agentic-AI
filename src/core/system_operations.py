@@ -124,19 +124,19 @@ class SystemOperationManager:
         
         return False
     
-    def execute_command(self, 
-                       command: str, 
-                       cwd: Optional[Union[str, Path]] = None,
-                       shell: bool = True,
-                       capture_output: bool = True) -> Tuple[int, str, str]:
+    def execute_command(self, command: str, cwd: Optional[Union[str, Path]] = None, shell: bool = True, 
+                       capture_output: bool = True, timeout: Optional[int] = None, 
+                       context: Optional[Dict[str, Any]] = None) -> Tuple[int, str, str]:
         """
         Execute a system command
         
         Args:
             command: Command to execute
-            cwd: Working directory (defaults to workspace path)
-            shell: Whether to execute in shell
-            capture_output: Whether to capture stdout/stderr
+            cwd: Current working directory
+            shell: Whether to use shell
+            capture_output: Whether to capture output
+            timeout: Timeout in seconds
+            context: Additional context information
             
         Returns:
             Tuple: (exit_code, stdout, stderr)
@@ -147,15 +147,17 @@ class SystemOperationManager:
         
         # Check if safe command or get permission
         if not self._is_safe_command(command):
-            # For permission checking, we only need the command name, not the path
-            # This avoids issues with trying to resolve a command string as a path
-            command_str = command
-            if not self.permission_manager.has_permission(command_str, "execute"):
-                if not self._permission_request_callback(command_str, "execute"):
+            # For permission checking, we need to handle command differently
+            # Extract the executable part for permission checking
+            command_parts = command.split(None, 1)
+            executable = command_parts[0] if command_parts else command
+            
+            if not self.permission_manager.has_permission(executable, "execute"):
+                if not self._permission_request_callback(command, "execute"):
                     logger.warning(f"Permission denied for command: {command}")
                     return 1, "", "Permission denied"
                 # Grant permission for this command
-                self.permission_manager.grant_permission(command_str, ["execute"])
+                self.permission_manager.grant_permission(executable, ["execute"])
         
         # Log command execution
         logger.info(f"Executing command: {command}")
@@ -168,14 +170,14 @@ class SystemOperationManager:
                 shell=shell,
                 capture_output=capture_output,
                 text=True,
-                timeout=300  # 5 minute timeout
+                timeout=timeout
             )
             
             # Return results
             return result.returncode, result.stdout, result.stderr
         except subprocess.TimeoutExpired:
             logger.error(f"Command timed out: {command}")
-            return 1, "", "Command timed out after 5 minutes"
+            return 1, "", "Command timed out"
         except Exception as e:
             logger.error(f"Error executing command: {e}")
             return 1, "", f"Error: {str(e)}"
@@ -319,9 +321,11 @@ default_system_manager = SystemOperationManager()
 def execute_command(command: str, 
                    cwd: Optional[Union[str, Path]] = None,
                    shell: bool = True,
-                   capture_output: bool = True) -> Tuple[int, str, str]:
+                   capture_output: bool = True,
+                   timeout: Optional[int] = None,
+                   context: Optional[Dict[str, Any]] = None) -> Tuple[int, str, str]:
     """Execute a system command"""
-    return default_system_manager.execute_command(command, cwd, shell, capture_output)
+    return default_system_manager.execute_command(command, cwd, shell, capture_output, timeout, context)
 
 def execute_python_script(script_path: Union[str, Path],
                          args: Optional[List[str]] = None,
