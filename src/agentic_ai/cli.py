@@ -104,6 +104,10 @@ def interactive_mode(code_generator: CodeGenerator) -> int:
     Returns:
         int: Exit code
     """
+    # Clear the screen first
+    os.system('cls' if os.name == 'nt' else 'clear')
+    
+    # Print the banner
     print_banner()
     print("Current workspace:", code_generator.workspace_path)
     print("Type 'help' for available commands.")
@@ -112,6 +116,8 @@ def interactive_mode(code_generator: CodeGenerator) -> int:
         # Main interactive loop
         while True:
             try:
+                # Flush stdout to ensure prompt is displayed
+                sys.stdout.flush()
                 command = input("\nYou: ")
                 if not command.strip():
                     continue

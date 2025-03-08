@@ -54,9 +54,8 @@ def main():
         wait_on_error()
         return 1
     except Exception as e:
-        logger.error(f"Application error: {e}", exc_info=True)
+        logger.error(f"Unexpected error: {e}", exc_info=True)
         print(f"Error: {e}")
-        print("\nDetailed error information:")
         traceback.print_exc()
         wait_on_error()
         return 1

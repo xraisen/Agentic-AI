@@ -33,11 +33,45 @@ When you start Agentic AI, you'll see this interface:
 Type 'exit' or 'quit' to exit.
 Type 'help' for commands.
 ==================================================
-
-You: 
 ```
 
-Type your commands after the "You:" prompt.
+You can interact with the AI by typing commands after the "You:" prompt:
+
+### Create a file
+
+```
+You: create file named example.txt with Hello, World!
+```
+
+### Read a file
+
+```
+You: read file example.txt
+```
+
+### List files in a directory
+
+```
+You: list files in .
+```
+
+### Search for files containing text
+
+```
+You: search files containing import
+```
+
+### Delete a file
+
+```
+You: delete file example.txt
+```
+
+### Create a directory
+
+```
+You: create directory docs
+```
 
 ## Basic Commands
 

@@ -493,27 +493,68 @@ if __name__ == "__main__":
             str: Result of the execution
         """
         try:
-            # Parse the instruction to determine the file operation
+            # Check if this is a file operation
             operation_type, params = self.parse_instruction(instruction)
             
-            # Generate and execute the appropriate code
-            if operation_type == "create_file":
-                return self.create_file(params.get("filename"), params.get("content", ""))
-            elif operation_type == "read_file":
-                return self.read_file(params.get("filename"))
-            elif operation_type == "delete_file":
-                return self.delete_file(params.get("filename"))
-            elif operation_type == "list_files":
-                return self.list_files(params.get("directory", "."))
-            elif operation_type == "search_files":
-                return self.search_files(params.get("pattern"), params.get("directory", "."))
-            elif operation_type == "create_directory":
-                return self.create_directory(params.get("directory"))
-            else:
-                return f"Unknown operation: {instruction}"
+            # If it's a known file operation, handle it directly
+            if operation_type != "unknown":
+                # Generate and execute the appropriate code
+                if operation_type == "create_file":
+                    return self.create_file(params.get("filename"), params.get("content", ""))
+                elif operation_type == "read_file":
+                    return self.read_file(params.get("filename"))
+                elif operation_type == "delete_file":
+                    return self.delete_file(params.get("filename"))
+                elif operation_type == "list_files":
+                    return self.list_files(params.get("directory", "."))
+                elif operation_type == "search_files":
+                    return self.search_files(params.get("pattern"), params.get("directory", "."))
+                elif operation_type == "create_directory":
+                    return self.create_directory(params.get("directory"))
+            
+            # If it's not a file operation, treat it as a general query to the AI
+            return self.get_ai_response(instruction)
+            
         except Exception as e:
             self.logger.error(f"Error executing operation: {e}", exc_info=True)
             return f"Error: {str(e)}"
+            
+    def get_ai_response(self, query: str) -> str:
+        """
+        Get a response from the AI for a general query
+        
+        Args:
+            query: The user's query
+            
+        Returns:
+            str: The AI's response
+        """
+        try:
+            # For general queries, provide a helpful response
+            if "hello" in query.lower() or "hi" in query.lower():
+                return "Hello there! 👋 How can I help you today?"
+                
+            elif "how are you" in query.lower():
+                return "I'm doing well, thank you for asking! How can I assist you with file operations today?"
+                
+            elif "what can you do" in query.lower() or "help" in query.lower():
+                return """I can help you with various file operations, such as:
+                
+1. Creating files: "create file named example.txt with Hello, World!"
+2. Reading files: "read file example.txt"
+3. Deleting files: "delete file example.txt"
+4. Listing files: "list files in ."
+5. Searching files: "search files containing example"
+6. Creating directories: "create directory docs"
+
+Just let me know what you'd like to do!"""
+                
+            else:
+                return f"I'm an AI assistant that can help with file operations. If you want to work with files, try commands like 'create file', 'read file', etc. Type 'help' for more information."
+                
+        except Exception as e:
+            self.logger.error(f"Error getting AI response: {e}", exc_info=True)
+            return f"Error generating response: {str(e)}"
 
     def create_file(self, filename: str, content: str) -> str:
         """Create a file with the given content"""
