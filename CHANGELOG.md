@@ -5,6 +5,41 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2024-03-08
+
+### Added
+- Advanced Windows system manipulation capabilities:
+  - Registry management with rollback capability
+  - Windows service control
+  - Firewall rule creation and management
+  - Scheduled task creation and management
+  - Administrative privilege elevation with user consent
+  - Background process execution and monitoring
+- Enhanced build system:
+  - Improved Windows application build with command-line options
+  - Support for creating standalone executables or installers
+  - Options for windowed or console applications
+  - Version tracking and embedding
+  - Better asset management during builds
+- New `windows_system_demo.py` example showcasing system manipulation features
+- Comprehensive documentation for new Windows system features
+- Robust error handling with rollback mechanisms for system operations
+- Privilege level detection and elevation request functionality
+
+### Changed
+- Improved system operations architecture for more granular permissions
+- Enhanced permission dialog with clearer operation descriptions
+- Updated documentation to reflect new capabilities
+- Refactored build process for better maintainability
+- Improved security model with more explicit user consent for system operations
+
+### Security
+- Added rollback capability for registry operations to prevent unintended changes
+- Implemented privilege elevation with explicit user consent
+- Enhanced permission model for system operations
+- Added confirmation dialogs for sensitive operations
+- Improved validation of system operation parameters
+
 ## [1.0.3] - 2024-03-08
 
 ### Fixed

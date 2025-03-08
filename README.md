@@ -1,203 +1,250 @@
 # Agentic AI
 
-A powerful AI assistant platform that seamlessly integrates across Windows, macOS, VS Code, and Chrome with reliable API connectivity and robust error handling.
+An AI-powered application with secure file system access, advanced system manipulation capabilities, permission management, and conversation history capabilities.
 
-## Features
+## Overview
 
-- **Cross-Platform Support**
-  - Windows desktop application with improved build process
-  - macOS desktop application
-  - VS Code extension
-  - Chrome extension with proper validation and packaging
+Agentic AI is a powerful AI assistant that can interact with your file system, execute system commands, manipulate Windows system components, and maintain conversation history - all with robust permission handling and security measures. It provides a reliable, secure way for AI to assist with tasks that require access to your local environment.
 
-- **AI Capabilities**
-  - Text generation and analysis through OpenRouter API
-  - Code completion and explanation with improved reliability
-  - Image analysis capabilities
-  - Natural language processing
-  - Multi-model support (Gemini, GPT, Claude, and more)
+## Key Features
 
-- **Enhanced Reliability**
-  - Robust error handling and user-friendly error messages
-  - Network retry logic with exponential backoff
-  - API key validation and verification
-  - Comprehensive logging for troubleshooting
+- **File System Operations**: Secure, permission-based file read/write/create/delete capabilities
+- **System Command Execution**: Controlled execution of system commands with user authorization
+- **Advanced Windows System Manipulation**:
+  - Registry management with rollback capability
+  - Windows service control
+  - Firewall rule creation
+  - Scheduled task management
+  - Administrative privilege elevation
+- **Background Process Management**: Run and monitor long-running tasks in the background
+- **Robust Error Handling & Rollback**: Safely attempt operations with automatic rollback
+- **Conversation History**: Persistent conversation logging with search and retrieval
+- **Permission Management**: Granular permission control for all operations
+- **AI Integration**: Connects to large language models for intelligent assistance
+- **Secure by Design**: All operations require explicit permissions
 
-- **Integration Features**
-  - Seamless cross-platform synchronization
-  - Global hotkeys
-  - Context-aware assistance
-  - Customizable settings with proper validation
+## Architecture
+
+Agentic AI is built around several core components:
+
+1. **File System Interface**: A secure abstraction layer for file operations
+2. **Permission Manager**: Tracks and enforces user-granted permissions
+3. **Conversation Logger**: Records and maintains conversation history
+4. **System Operations Manager**: Controls execution of system commands and Windows system manipulation
+5. **Agentic Core**: Integrates all components with the AI model
 
 ## Installation
 
-### Desktop Applications
+### Prerequisites
 
-#### Windows
-1. Download the latest Windows installer from the releases page
-2. Run the installer and follow the setup wizard
-3. Launch Agentic AI from the Start menu or desktop shortcut
-4. On first run, copy config.example.json to config.json and add your API key
+- Python 3.8 or higher
+- pip package manager
 
-#### macOS
-1. Download the latest DMG file from the releases page
-2. Open the DMG file and drag Agentic AI to Applications
-3. Launch Agentic AI from Applications or Spotlight
-4. On first run, copy config.example.json to config.json and add your API key
+### Setup
 
-### Extensions
+1. Clone this repository:
+```bash
+git clone https://github.com/yourusername/agentic-ai.git
+cd agentic-ai
+```
 
-#### VS Code
-1. Open VS Code
-2. Go to the Extensions view (Ctrl+Shift+X)
-3. Search for "Agentic AI"
-4. Click Install
-5. Configure your API key in the extension settings
+2. Create and activate a virtual environment:
+```bash
+python -m venv .venv
+# On Windows
+.\.venv\Scripts\activate
+# On macOS/Linux
+source .venv/bin/activate
+```
 
-#### Chrome
-1. Download the latest Chrome extension ZIP from the releases page
-2. Extract the ZIP file to a folder
-3. Open Chrome and go to chrome://extensions/
-4. Enable Developer mode (toggle in top right)
-5. Click "Load unpacked" and select the extracted folder
-6. Configure your API key in the extension options
+3. Install dependencies:
+```bash
+pip install -r requirements.txt
+```
 
-## Configuration
+4. Configure your API key:
+```bash
+cp config.example.json config.json
+# Edit config.json to add your API key
+```
 
-### API Keys
-1. Get your API keys from:
-   - OpenRouter: https://openrouter.ai/
-   - Direct API: Configure in settings
-2. Add your API key to the configuration file or environment variables
-3. API keys should start with "sk-or-v1-" for OpenRouter
+## Usage
 
-### Settings
-The application can be configured through:
-- GUI settings panel
-- Configuration file (`config.json`)
-- Environment variables
+### Basic Usage
 
-See [CONFIGURATION.md](CONFIGURATION.md) for detailed settings documentation.
+```bash
+python src/main.py
+```
+
+### Running the Demo
+
+```bash
+python examples/file_operations_demo.py
+```
+
+### Building Windows Application
+
+```bash
+# Build a standard windowed application
+python build_windows.py
+
+# Build with console for debugging
+python build_windows.py --console
+
+# Build a single executable file
+python build_windows.py --onefile
+
+# Create an installer
+python build_windows.py --installer
+```
+
+## Windows System Manipulation Features
+
+Agentic AI provides advanced Windows system manipulation capabilities with robust security controls:
+
+### Registry Management
+
+```python
+# Modify registry values with automatic rollback capability
+from src.core.system_operations import modify_registry
+
+# Create or modify a registry value
+success = modify_registry(
+    "HKEY_CURRENT_USER\\Software\\MyApp",
+    "Setting1",
+    "My Value",
+    "REG_SZ"
+)
+
+# Rollback a registry change if needed
+from src.core.system_operations import get_system_manager
+system_manager = get_system_manager()
+system_manager.rollback_last_operation()
+```
+
+### Service Management
+
+```python
+# Control Windows services
+from src.core.system_operations import manage_service
+
+# Start, stop, restart, or query service status
+success, output = manage_service("wuauserv", "query")  # Windows Update service
+success, output = manage_service("wuauserv", "start")
+```
+
+### Privilege Elevation
+
+```python
+# Elevate to administrator privileges when needed
+from src.core.system_operations import elevate_privileges
+
+# Prompt user and elevate if approved
+elevated = elevate_privileges("Install system driver")
+```
+
+### Firewall Management
+
+```python
+# Create Windows Firewall rules
+from src.core.system_operations import create_firewall_rule
+
+# Create an allow rule for inbound TCP traffic on port 8080
+success = create_firewall_rule(
+    "MyApp Server",
+    "allow",
+    "in",
+    "TCP",
+    8080
+)
+```
+
+### Scheduled Tasks
+
+```python
+# Create Windows scheduled tasks
+from src.core.system_operations import create_scheduled_task
+
+# Create a daily task
+success = create_scheduled_task(
+    "MyAppDailyBackup",
+    "C:\\path\\to\\backup.exe",
+    "DAILY"
+)
+```
+
+### Background Process Management
+
+```python
+# Run commands in the background
+from src.core.system_operations import get_system_manager
+system_manager = get_system_manager()
+
+# Start a long-running process
+exit_code, stdout, stderr = system_manager.execute_command(
+    "long_running_command.exe",
+    background=True
+)
+
+# Get process ID from stdout
+process_id = int(stdout.split()[-1])
+
+# Check status later
+status = system_manager.get_process_status(process_id)
+
+# Optionally terminate the process
+if status["exists"] and not status["completed"]:
+    system_manager.kill_process(process_id)
+```
+
+## Security
+
+Agentic AI takes security seriously with multiple layers of protection:
+
+1. **Workspace Confinement**: By default, operations are limited to the specified workspace
+2. **Explicit Permissions**: All sensitive operations require explicit user permission
+3. **Permission Expiry**: Permissions can be limited by time
+4. **Operation Logging**: All operations are logged for auditing
+5. **Safe Command Filtering**: System commands are filtered for safety
+6. **Rollback Capability**: System changes can be rolled back when possible
+7. **Privilege Management**: Administrative tasks require explicit elevation
+8. **UI Confirmation**: All sensitive operations prompt the user through the UI
 
 ## Development
 
-### Prerequisites
-- Python 3.8 or higher
-- Node.js 14 or higher
-- Git
-
-### Setup
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/xraisen/agentic-ai.git
-   cd agentic-ai
-   ```
-
-2. Create a virtual environment:
-   ```bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
-   ```
-
-3. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-4. Install development dependencies:
-   ```bash
-   pip install -r requirements-dev.txt
-   ```
-
-### Building
-
-#### Desktop Applications
-```bash
-# Build for current platform
-python build.py
-
-# Build for specific platform
-python build.py --platform windows
-python build.py --platform mac
-```
-
-#### Extensions
-```bash
-# Build VS Code extension
-cd .vscode
-npm install
-npm run compile
-vsce package
-
-# Build Chrome extension
-python build.py --platform chrome
-```
-
-### Testing
-```bash
-# Run all tests
-pytest
-
-# Run specific test category
-pytest tests/test_api.py
-pytest tests/test_ui.py
-```
-
-### Code Style
-```bash
-# Format code
-black .
-isort .
-
-# Type checking
-mypy .
-
-# Linting
-flake8
-```
-
-## Project Structure
+### Project Structure
 
 ```
 agentic-ai/
-├── src/                    # Source code
-│   ├── main.py            # Main application entry
-│   ├── ui/                # UI components
-│   ├── api/               # API integration
-│   └── utils/             # Utility functions
-├── tests/                 # Test files
-├── assets/               # Application assets
-├── .vscode/              # VS Code extension
-├── chrome/               # Chrome extension
-├── build.py              # Build script
-├── app_launcher.py       # Application launcher
-├── requirements.txt      # Python dependencies
-└── README.md            # This file
+├── src/
+│   ├── core/                 # Core components
+│   │   ├── ai_engine.py      # AI model integration
+│   │   ├── agentic_core.py   # Main integration layer
+│   │   ├── file_operations.py # File operations manager
+│   │   └── system_operations.py # System command and Windows manipulation manager
+│   ├── utils/                # Utility modules
+│   │   ├── file_system_interface.py # File system abstraction
+│   │   ├── permission_manager.py # Permission management
+│   │   ├── conversation_logger.py # Conversation history
+│   │   └── logger.py         # Logging utility
+│   └── main.py               # Application entry point
+├── tests/                    # Unit tests
+├── examples/                 # Example applications
+├── logs/                     # Log directory
+├── build_windows.py          # Windows build script
+└── config.json               # Configuration file
 ```
 
-## Error Handling
+### Running Tests
 
-Agentic AI includes comprehensive error handling:
-
-- **Network Issues**: Automatic retries with exponential backoff
-- **API Errors**: Clear, user-friendly messages for common API errors
-- **Configuration Problems**: Validation and clear guidance for fixes
-- **Detailed Logging**: Comprehensive logs for troubleshooting
+```bash
+python -m unittest discover tests
+```
 
 ## Contributing
 
-1. Fork the repository
-2. Create a feature branch
-3. Commit your changes with descriptive commit messages
-4. Push to the branch
-5. Create a Pull Request
+Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Acknowledgments
-
-- Thanks to all contributors
-- Built with [PyQt6](https://www.riverbankcomputing.com/software/pyqt/)
-- Powered by various AI models and APIs via OpenRouter 
+This project is licensed under the MIT License - see the LICENSE file for details. 

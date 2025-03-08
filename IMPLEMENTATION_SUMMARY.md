@@ -7,9 +7,10 @@ This document summarizes the implementation of critical components for Agentic A
 1. File Operations Abstraction Layer
 2. Permission Management System
 3. Conversation History Logging
-4. Integration Components
+4. Advanced Windows System Manipulation
+5. Integration Components
 
-These components enable Agentic AI to securely perform file operations, manage permissions, and maintain conversation history.
+These components enable Agentic AI to securely perform file operations, manage permissions, manipulate Windows system components, and maintain conversation history.
 
 ## Architecture
 
@@ -21,7 +22,7 @@ src/
 │   └── conversation_logger.py     # Conversation history in SQLite
 ├── core/
 │   ├── file_operations.py         # User-facing file operations with UI
-│   ├── system_operations.py       # Secure system command execution
+│   ├── system_operations.py       # System manipulation and command execution
 │   ├── conversation_manager.py    # Higher-level conversation management
 │   └── agentic_core.py            # Integration of all components
 └── main.py                        # Application entry point
@@ -72,10 +73,29 @@ A system for storing and retrieving conversation history:
 - `Conversation` and `ConversationEntry`: Data models for conversations
 - Helper functions for adding, retrieving, and searching conversations
 
-### 4. Integration Components
+### 4. Advanced Windows System Manipulation (`system_operations.py`)
+
+A comprehensive system for securely manipulating Windows system components:
+
+- Registry management with rollback capability
+- Windows service control with appropriate privileges
+- Firewall rule creation and management
+- Scheduled task creation and management
+- Background process execution and monitoring
+- Administrative privilege elevation
+- Secure process execution and system command handling
+
+**Key Classes and Functions:**
+- `SystemOperationManager`: Main class for system manipulation operations
+- Helper functions for registry, service, firewall, and task operations
+- Background process management through thread-based execution
+- Rollback mechanisms for registry operations
+- UI integration for permission requests and elevation prompts
+
+### 5. Integration Components
 
 - **`file_operations.py`**: Integrates file system interface with permission management and adds a UI layer
-- **`system_operations.py`**: Provides secure system command execution with permission checks
+- **`system_operations.py`**: Provides secure system manipulation with permission checks and privilege handling
 - **`conversation_manager.py`**: High-level conversation management with context windows and summaries
 - **`agentic_core.py`**: Top-level integration of all components with the AI engine
 
@@ -148,6 +168,57 @@ results = cm.search_message_content("Python class")
 old_convs = cm.find_conversations_by_date(days_ago=3)
 ```
 
+### Windows System Manipulation
+
+```python
+from src.core.system_operations import get_system_manager
+
+# Initialize
+system_manager = get_system_manager()
+
+# Registry operations
+system_manager.modify_registry(
+    "HKEY_CURRENT_USER\\Software\\MyApp",
+    "MySetting",
+    "Hello World",
+    "REG_SZ"
+)
+
+# Background process execution
+exit_code, stdout, stderr = system_manager.execute_command(
+    "long_running_task.exe",
+    background=True
+)
+process_id = int(stdout.split("Process ID: ")[1].strip())
+status = system_manager.get_process_status(process_id)
+
+# Service control
+success, output = system_manager.manage_service("wuauserv", "query")
+
+# Privilege elevation
+if not system_manager.is_elevated:
+    system_manager.elevate_privileges("Administrative operations")
+
+# Firewall rules
+system_manager.create_firewall_rule(
+    "MyAppRule",
+    "allow",
+    "in",
+    "TCP",
+    8080
+)
+
+# Scheduled tasks
+system_manager.create_scheduled_task(
+    "DailyBackup",
+    "C:\\backup.exe",
+    "DAILY"
+)
+
+# Rollback registry changes
+system_manager.rollback_last_operation()
+```
+
 ### Complete Integration
 
 ```python
@@ -169,6 +240,31 @@ exit_code, stdout, stderr = core.execute_command("echo Hello")
 history = core.get_conversation_history(days_ago=1)
 ```
 
+## Building the Windows Application
+
+The project includes a comprehensive build system for creating Windows executables:
+
+```python
+# Build a standard windowed application
+python build_windows.py
+
+# Build with console for debugging
+python build_windows.py --console
+
+# Build a single executable file
+python build_windows.py --onefile
+
+# Create an installer
+python build_windows.py --installer
+```
+
+The build script supports:
+- Creating standalone executables with PyInstaller
+- Packaging with necessary assets and configurations
+- Creating optional installers using Inno Setup
+- Command-line arguments for build customization
+- Version tracking and embedding
+
 ## Testing
 
 Unit tests for all components are provided in the `tests` directory:
@@ -176,15 +272,21 @@ Unit tests for all components are provided in the `tests` directory:
 - `tests/test_file_system.py`: Tests for the file system interface
 - `tests/test_permission_manager.py`: Tests for the permission management system
 - `tests/test_conversation_logger.py`: Tests for the conversation history logging
+- `tests/test_system_operations.py`: Tests for Windows system manipulation
 
 ## Demonstration
 
-An example application is provided in `examples/file_operations_demo.py` that showcases the capabilities of the system by:
+Example applications are provided in the `examples` directory:
 
-1. Creating demo files and directories
-2. Performing various file operations
-3. Executing system commands
-4. Managing conversation history
+1. `examples/file_operations_demo.py`: Demonstrates file operations capabilities
+2. `examples/windows_system_demo.py`: Demonstrates Windows system manipulation features
+
+These examples showcase:
+- Creating and manipulating files and directories
+- Registry, service, firewall, and task management
+- Background process execution and monitoring
+- Privilege elevation
+- Conversation history management
 
 ## Security Considerations
 
@@ -193,8 +295,11 @@ An example application is provided in `examples/file_operations_demo.py` that sh
 - Sensitive operations prompt the user for authorization
 - Permissions can be time-limited
 - System commands are filtered and require explicit permission
+- Windows system manipulation features require explicit user approval
+- Registry operations support rollback for safety
+- Privilege elevation requires user consent
 - All operations are logged for auditing
 
 ## Conclusion
 
-The implemented components provide a secure, robust framework for Agentic AI to interact with the file system, execute system commands, and maintain conversation history. This enables the AI to be more helpful while maintaining appropriate security boundaries and user control. 
+The implemented components provide a secure, robust framework for Agentic AI to interact with the file system, manipulate Windows system components, execute system commands, and maintain conversation history. This enables the AI to be more helpful while maintaining appropriate security boundaries and user control. 
