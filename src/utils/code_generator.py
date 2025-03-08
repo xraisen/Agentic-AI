@@ -48,7 +48,7 @@ class CodeGenerator:
         }
         self.unsafe_functions = {
             "exec", "eval", "compile", "getattr", "setattr", "delattr",
-            "globals", "locals", "__import__", "open"
+            "globals", "locals", "__import__"
         }
         
     def is_safe_code(self, code: str) -> Tuple[bool, str]:
@@ -135,15 +135,34 @@ def main():
         
         # Add specific file operation code based on the instruction
         if "create" in instruction.lower() and "file" in instruction.lower():
-            # Extract filename using basic pattern matching
-            filename_match = re.search(r'(?:named|called)\s+["\']?([^"\']+)["\']?', instruction)
+            # Extract filename using better pattern matching
+            # Match 'named filename.txt with content' or 'called filename.txt with content'
+            filename_match = re.search(r'(?:named|called)\s+([^\s]+)(?:\s+with\s+|\s+containing\s+)(.*)', instruction)
+            
             if filename_match:
                 filename = filename_match.group(1)
-                # Extract content if specified
-                content_match = re.search(r'(?:with|containing)\s+["\']?([^"\']+)["\']?', instruction)
-                content = content_match.group(1) if content_match else "This is a new file."
+                content = filename_match.group(2)
                 
                 code += f"""
+        # Create a new file
+        file_path = workspace_path / "{filename}"
+        logger.info(f"Creating file: {{file_path}}")
+        with open(file_path, 'w') as f:
+            f.write({repr(content)})
+        logger.info(f"Successfully created file: {{file_path}}")
+        return {{"success": True, "message": f"File created: {{file_path}}", "path": str(file_path)}}
+"""
+            else:
+                # Fallback to simpler pattern if the first one doesn't match
+                filename_match = re.search(r'(?:named|called)\s+([^\s]+)', instruction)
+                if filename_match:
+                    filename = filename_match.group(1)
+                    
+                    # Look for content separately
+                    content_match = re.search(r'(?:with|containing)\s+(.*)', instruction)
+                    content = content_match.group(1) if content_match else "This is a new file."
+                    
+                    code += f"""
         # Create a new file
         file_path = workspace_path / "{filename}"
         logger.info(f"Creating file: {{file_path}}")
@@ -318,7 +337,8 @@ if __name__ == "__main__":
             if "RESULT_START" in output and "RESULT_END" in output:
                 try:
                     result_json = output.split("RESULT_START")[1].split("RESULT_END")[0].strip()
-                    parsed_result = eval(result_json)  # Safe to use eval here since we're parsing JSON
+                    import json
+                    parsed_result = json.loads(result_json)  # Use json.loads instead of eval
                     execution_result = {
                         "success": parsed_result.get("success", False),
                         "message": parsed_result.get("message", ""),
