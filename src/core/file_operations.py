@@ -33,32 +33,22 @@ class FileOperationManager:
     management system to provide a secure interface for file operations.
     """
     
-    def __init__(self, workspace_path: Optional[PathLike] = None):
+    def __init__(self, workspace_path: Optional[PathLike] = None, permission_manager=None):
         """
-        Initialize file operation manager
+        Initialize the file operation manager
         
         Args:
-            workspace_path: Path to the workspace (project root)
+            workspace_path: Path to workspace
+            permission_manager: Permission manager instance
         """
-        # Set workspace path
-        self.workspace_path = Path(workspace_path) if workspace_path else Path.cwd()
-        logger.info(f"Initializing file operation manager with workspace: {self.workspace_path}")
+        self.workspace_path = workspace_path
         
-        # Create permission manager
-        self.permission_manager = PermissionManager(
-            config_path="config/permissions.json",
-            auto_save=True,
-            workspace_path=self.workspace_path
-        )
+        # Initialize file system interface
+        self.fs = FileSystemInterface(workspace_path, permission_manager)
+        self.permission_manager = self.fs.permission_manager
         
         # Set UI callback for permission requests
         self.permission_manager.set_ui_callback(self._permission_request_callback)
-        
-        # Create file system interface
-        self.fs = FileSystemInterface(
-            workspace_path=self.workspace_path,
-            permission_manager=self.permission_manager
-        )
         
         # Root window for dialogs
         self.root = None
@@ -291,6 +281,27 @@ class FileOperationManager:
             Dict: Dictionary of path -> permission record
         """
         return self.permission_manager.list_permissions()
+    
+    def set_current_directory(self, path: PathLike) -> bool:
+        """
+        Set the current working directory
+        
+        Args:
+            path: Path to set as current directory
+            
+        Returns:
+            bool: True if successful, False otherwise
+        """
+        return self.fs.set_current_directory(path)
+    
+    def get_current_directory(self) -> Path:
+        """
+        Get the current working directory
+        
+        Returns:
+            Path: Current working directory
+        """
+        return self.fs.get_current_directory()
 
 
 # Create a default instance for easy import

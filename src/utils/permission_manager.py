@@ -356,6 +356,44 @@ class PermissionManager:
             # Restore callback
             self.ui_callback = callback
 
+    def request_permission(self, path: PathLike, operation: str) -> bool:
+        """
+        Request permission for an operation on a path
+        
+        Args:
+            path: Path to request permission for
+            operation: Operation to request permission for
+            
+        Returns:
+            bool: True if permission was granted, False otherwise
+        """
+        # First check if permission already exists
+        if self.check_permission(path, operation):
+            return True
+            
+        # If we have a UI callback, use it to request permission
+        if self.ui_callback:
+            if self.ui_callback(path, operation):
+                # Permission granted, store it
+                self.grant_permission(path, [operation])
+                return True
+            else:
+                # Permission denied
+                return False
+        
+        # For specific system drives, grant automatic permission for read operations
+        path_obj = Path(path).resolve()
+        path_str = str(path_obj)
+        
+        if operation == "read":
+            # Auto-grant read permission for root directories (drives)
+            if len(path_obj.parts) <= 2:  # e.g., "C:\" or "/home"
+                self.grant_permission(path, ["read"], duration=3600)  # Grant for 1 hour
+                return True
+        
+        # No UI callback and no auto-permission, deny by default
+        return False
+
 
 # Create a default instance for easy import
 default_permission_manager = PermissionManager()

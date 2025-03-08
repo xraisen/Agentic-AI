@@ -52,12 +52,21 @@ class FileSystemInterface:
         Initialize the file system interface
         
         Args:
-            workspace_path: Root path for workspace operations
-            permission_manager: Permission manager instance to verify operations
+            workspace_path: Path to workspace (default: current directory)
+            permission_manager: Permission manager instance
         """
-        self.workspace_path = Path(workspace_path) if workspace_path else Path.cwd()
-        self.permission_manager = permission_manager
-        self.logger = logging.getLogger("agentic_ai.file_system")
+        self.workspace_path = Path(workspace_path or Path.cwd()).resolve()
+        self.current_path = self.workspace_path
+        # Configure logger
+        self.logger = logging.getLogger("agentic_ai.filesystem")
+        
+        # Use provided permission manager or create a default one
+        if permission_manager:
+            self.permission_manager = permission_manager
+        else:
+            # Local import to prevent circular imports
+            from .permission_manager import PermissionManager
+            self.permission_manager = PermissionManager(workspace_path=self.workspace_path)
     
     def _check_permission(self, path: PathLike, operation: str) -> bool:
         """
@@ -407,6 +416,60 @@ class FileSystemInterface:
             self.logger.error(f"Error moving {src_path} to {dst_path}: {str(e)}")
             self._log_operation("move", f"{src_path} to {dst_path}", False)
             return False
+    
+    def set_current_directory(self, path: PathLike) -> bool:
+        """
+        Set the current working directory
+        
+        Args:
+            path: Path to set as current directory
+            
+        Returns:
+            bool: True if successful, False otherwise
+        """
+        try:
+            # Convert to Path object and resolve
+            path_obj = Path(path).resolve()
+            
+            # Check if it's a valid directory
+            if not path_obj.is_dir():
+                self.logger.warning(f"Not a directory: {path}")
+                return False
+                
+            # Check if we have permission to access this directory
+            if not self._check_permission(path_obj, "read"):
+                # Try to request permission
+                if hasattr(self.permission_manager, 'request_permission'):
+                    if not self.permission_manager.request_permission(path_obj, "read"):
+                        self.logger.warning(f"Permission denied: Cannot access directory {path}")
+                        return False
+                else:
+                    self.logger.warning(f"Permission denied: Cannot access directory {path}")
+                    return False
+            
+            # Update current path
+            self.current_path = path_obj
+            
+            # Update workspace path if the new path is not within the current workspace
+            # This ensures future relative paths are resolved correctly
+            if not str(path_obj).startswith(str(self.workspace_path)):
+                self.workspace_path = path_obj
+                
+            self._log_operation("set_dir", path)
+            return True
+        except Exception as e:
+            self.logger.error(f"Error changing directory to {path}: {str(e)}")
+            self._log_operation("set_dir", path, False)
+            return False
+    
+    def get_current_directory(self) -> Path:
+        """
+        Get the current working directory
+        
+        Returns:
+            Path: Current working directory
+        """
+        return self.current_path
 
 
 # Create a default instance for easy import
