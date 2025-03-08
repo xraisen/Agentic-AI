@@ -10,35 +10,40 @@ from pathlib import Path
 # Import the code generator
 from src.utils.code_generator import CodeGenerator
 
+# Set up logging
+logger = logging.getLogger(__name__)
+
 def print_banner():
     """Print the Agentic AI banner"""
     banner = """
-    +-+-+-+-+-+-+-+ +-+-+
-    |A|g|e|n|t|i|c| |A|I|
-    +-+-+-+-+-+-+-+ +-+-+
-    File Manipulation Assistant
-    Type 'help' for commands, 'exit' to quit
-    """
+==================================================
+             Agentic AI
+==================================================
+Type 'exit' or 'quit' to exit.
+Type 'help' for commands.
+==================================================
+"""
     print(banner)
 
 def print_help():
     """Print help information for the CLI"""
     help_text = """
-    Agentic AI CLI Commands:
-    -----------------------
-    help                       : Show this help message
-    exit, quit                 : Exit the application
-    
-    File Operations (examples):
-    create file named example.txt with Hello, World!
-    read file example.txt
-    delete file example.txt
-    list files in .
-    search files containing example
-    create directory docs
-    
-    Try using natural language to describe what you want to do!
-    """
+Agentic AI CLI Commands:
+-----------------------
+help                       : Show this help message
+exit, quit                 : Exit the application
+clear                      : Clear the screen
+
+File Operations (examples):
+create file named example.txt with Hello, World!
+read file example.txt
+delete file example.txt
+list files in .
+search files containing example
+create directory docs
+
+Try using natural language to describe what you want to do!
+"""
     print(help_text)
 
 def wait_on_error(seconds=3):
@@ -52,7 +57,7 @@ def handle_command(code_generator: CodeGenerator, command: str) -> bool:
     Args:
         code_generator: The code generator instance
         command: The command to handle
-        
+
     Returns:
         bool: True to continue, False to exit
     """
@@ -67,67 +72,50 @@ def handle_command(code_generator: CodeGenerator, command: str) -> bool:
         os.system('cls' if os.name == 'nt' else 'clear')
         print_banner()
         return True
-    
+
     # Handle file operation commands using the code generator
     print(f"\nProcessing: {command}")
     print("Generating and executing code...")
     
     try:
-        success, message, result = code_generator.generate_and_execute(command)
+        # Generate and execute code based on the command
+        result = code_generator.generate_and_execute(command)
         
-        if success:
-            print(f"\n✅ Success: {message}")
-            
-            # If we have result data to display
-            if 'result' in result and isinstance(result['result'], dict):
-                result_data = result['result']
-                
-                # For file read operations, show content
-                if 'content' in result_data:
-                    print("\nFile Content:")
-                    print("-" * 50)
-                    print(result_data['content'])
-                    print("-" * 50)
-                
-                # For list operations, show files
-                if 'files' in result_data:
-                    print("\nFiles:")
-                    for i, file in enumerate(result_data['files'], 1):
-                        print(f"{i}. {file}")
+        # Display the result
+        if result:
+            print("\nResult:")
+            print(result)
         else:
-            print(f"\n❌ Error: {message}")
+            print("\nCommand executed successfully.")
             
-            # Show error details if available
-            if 'stderr' in result and result['stderr']:
-                print("\nError details:")
-                print(result['stderr'])
+        return True
     except Exception as e:
-        print(f"\n❌ Error: {str(e)}")
-    
-    return True
+        print(f"\nError: {e}")
+        logger.error(f"Error executing command: {e}", exc_info=True)
+        return True
 
 def interactive_mode(code_generator: CodeGenerator) -> int:
     """
     Run the interactive CLI mode
-    
+
     Args:
         code_generator: The code generator instance
-        
+
     Returns:
         int: Exit code
     """
     print_banner()
     print("Current workspace:", code_generator.workspace_path)
-    print_help()
-    
+    print("Type 'help' for available commands.")
+
     try:
         # Main interactive loop
         while True:
             try:
-                command = input("\n> ")
+                command = input("\nYou: ")
                 if not command.strip():
                     continue
-                
+
                 # Handle the command
                 should_continue = handle_command(code_generator, command)
                 if not should_continue:
@@ -140,51 +128,52 @@ def interactive_mode(code_generator: CodeGenerator) -> int:
         
         return 0
     except Exception as e:
-        print(f"Error in interactive mode: {e}")
-        wait_on_error()
+        logger.error(f"Error in interactive mode: {e}", exc_info=True)
+        print(f"Error: {e}")
         return 1
 
-def main(args: list[str]) -> int:
-    """Run the Agentic AI CLI.
+def main(args=None) -> int:
+    """
+    Main entry point for the CLI
     
     Args:
-        args: Command line arguments.
+        args: Command line arguments
         
     Returns:
-        Exit code (0 for success, non-zero for error).
+        int: Exit code
     """
-    logger = logging.getLogger(__name__)
-    
-    # Parse command line arguments
-    parser = argparse.ArgumentParser(description="Agentic AI Command Line Interface")
-    parser.add_argument("--version", action="version", version="%(prog)s 1.1.0")
-    parser.add_argument("--debug", action="store_true", help="Enable debug logging")
-    parser.add_argument("--config", help="Path to configuration file")
-    parser.add_argument("--workspace", help="Path to workspace directory")
+    # Create argument parser
+    parser = argparse.ArgumentParser(description="Agentic AI CLI")
     parser.add_argument("command", nargs="*", help="Command to execute")
+    parser.add_argument("-w", "--workspace", help="Set the workspace directory")
+    parser.add_argument("-d", "--debug", action="store_true", help="Enable debug logging")
+    
+    # Parse arguments
+    if args is None:
+        args = sys.argv[1:]
     
     parsed_args = parser.parse_args(args)
-    
+
     if parsed_args.debug:
         logging.getLogger().setLevel(logging.DEBUG)
-    
+
     try:
         # Determine workspace path
         workspace_path = None
         if parsed_args.workspace:
-            workspace_path = Path(parsed_args.workspace).resolve()
+            workspace_path = Path(parsed_args.workspace).resolve()   
         else:
             workspace_path = Path.cwd()
-        
+
         # Create code generator
         code_generator = CodeGenerator(workspace_path=workspace_path)
-        
+
         # Process command or start interactive mode
         if parsed_args.command:
             # Join arguments into a single command
             command = " ".join(parsed_args.command)
             logger.info(f"Processing command: {command}")
-            
+
             # Handle the command
             handle_command(code_generator, command)
             return 0
@@ -192,7 +181,7 @@ def main(args: list[str]) -> int:
             # Interactive mode
             logger.info("Starting interactive mode")
             return interactive_mode(code_generator)
-            
+
     except KeyboardInterrupt:
         logger.info("User interrupted")
         return 0
@@ -200,4 +189,7 @@ def main(args: list[str]) -> int:
         logger.error(f"Error in CLI: {e}", exc_info=True)
         print(f"Error: {e}")
         wait_on_error()
-        return 1 
+        return 1
+
+if __name__ == "__main__":
+    sys.exit(main()) 

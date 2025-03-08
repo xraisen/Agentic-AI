@@ -75,20 +75,57 @@ cp config.example.json config.json
 ### Basic Usage
 
 ```bash
-python src/main.py
+python src/agentic_ai/main.py
 ```
 
 ### Running the CLI
 
 ```bash
 # Start interactive mode
-python src/main.py
+python src/agentic_ai/main.py
 
 # Execute a single command
-python src/main.py create file named test.txt with Hello World
+python src/agentic_ai/main.py create file named test.txt with Hello World
 
 # Specify a workspace directory
-python src/main.py --workspace /path/to/workspace
+python src/agentic_ai/main.py --workspace /path/to/workspace
+```
+
+### Using the Windows Application
+
+After building the Windows application, you can run it directly from the `dist` folder. The application provides a simple interactive interface:
+
+```
+==================================================
+             Agentic AI
+==================================================
+Type 'exit' or 'quit' to exit.
+Type 'help' for commands.
+==================================================
+
+You: Hello
+
+Agentic AI: Hello there! How can I help you today?
+
+You: create file named example.txt with Hello, World!
+
+Processing: create file named example.txt with Hello, World!
+Generating and executing code...
+
+Result:
+File 'example.txt' created successfully
+
+You: read file example.txt
+
+Processing: read file example.txt
+Generating and executing code...
+
+Result:
+Hello, World!
+
+You: exit
+
+Exiting Agentic AI...
 ```
 
 ### Building Windows Application

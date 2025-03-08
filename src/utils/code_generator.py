@@ -482,7 +482,7 @@ if __name__ == "__main__":
         
         return "\n".join(code_lines)
     
-    def generate_and_execute(self, instruction: str) -> Tuple[bool, str, Dict[str, Any]]:
+    def generate_and_execute(self, instruction: str) -> str:
         """
         High-level function to generate code and execute it based on instruction
         
@@ -490,11 +490,212 @@ if __name__ == "__main__":
             instruction: Natural language instruction
             
         Returns:
-            Tuple of (success, message, full_result)
+            str: Result of the execution
         """
-        result = self.execute_file_operation(instruction)
+        try:
+            # Parse the instruction to determine the file operation
+            operation_type, params = self.parse_instruction(instruction)
+            
+            # Generate and execute the appropriate code
+            if operation_type == "create_file":
+                return self.create_file(params.get("filename"), params.get("content", ""))
+            elif operation_type == "read_file":
+                return self.read_file(params.get("filename"))
+            elif operation_type == "delete_file":
+                return self.delete_file(params.get("filename"))
+            elif operation_type == "list_files":
+                return self.list_files(params.get("directory", "."))
+            elif operation_type == "search_files":
+                return self.search_files(params.get("pattern"), params.get("directory", "."))
+            elif operation_type == "create_directory":
+                return self.create_directory(params.get("directory"))
+            else:
+                return f"Unknown operation: {instruction}"
+        except Exception as e:
+            self.logger.error(f"Error executing operation: {e}", exc_info=True)
+            return f"Error: {str(e)}"
+
+    def create_file(self, filename: str, content: str) -> str:
+        """Create a file with the given content"""
+        if not filename:
+            return "Error: No filename provided"
         
-        success = result.get("success", False)
-        message = result.get("message", "Operation failed")
+        try:
+            filepath = self.workspace_path / filename
+            with open(filepath, 'w') as f:
+                f.write(content)
+            return f"File '{filename}' created successfully"
+        except Exception as e:
+            self.logger.error(f"Error creating file: {e}", exc_info=True)
+            return f"Error creating file: {str(e)}"
+
+    def read_file(self, filename: str) -> str:
+        """Read the contents of a file"""
+        if not filename:
+            return "Error: No filename provided"
         
-        return success, message, result 
+        try:
+            filepath = self.workspace_path / filename
+            with open(filepath, 'r') as f:
+                content = f.read()
+            return content
+        except FileNotFoundError:
+            return f"Error: File '{filename}' not found"
+        except Exception as e:
+            self.logger.error(f"Error reading file: {e}", exc_info=True)
+            return f"Error reading file: {str(e)}"
+
+    def delete_file(self, filename: str) -> str:
+        """Delete a file"""
+        if not filename:
+            return "Error: No filename provided"
+        
+        try:
+            filepath = self.workspace_path / filename
+            if not filepath.exists():
+                return f"Error: File '{filename}' not found"
+            
+            filepath.unlink()
+            return f"File '{filename}' deleted successfully"
+        except Exception as e:
+            self.logger.error(f"Error deleting file: {e}", exc_info=True)
+            return f"Error deleting file: {str(e)}"
+
+    def list_files(self, directory: str = ".") -> str:
+        """List files in a directory"""
+        try:
+            dirpath = self.workspace_path / directory
+            if not dirpath.exists():
+                return f"Error: Directory '{directory}' not found"
+            
+            files = [f.name for f in dirpath.iterdir()]
+            if not files:
+                return f"No files found in '{directory}'"
+            
+            result = f"Files in '{directory}':\n"
+            for i, file in enumerate(files, 1):
+                result += f"{i}. {file}\n"
+            return result
+        except Exception as e:
+            self.logger.error(f"Error listing files: {e}", exc_info=True)
+            return f"Error listing files: {str(e)}"
+
+    def search_files(self, pattern: str, directory: str = ".") -> str:
+        """Search for files containing a pattern"""
+        if not pattern:
+            return "Error: No search pattern provided"
+        
+        try:
+            dirpath = self.workspace_path / directory
+            if not dirpath.exists():
+                return f"Error: Directory '{directory}' not found"
+            
+            matching_files = []
+            for filepath in dirpath.glob("**/*"):
+                if filepath.is_file():
+                    try:
+                        with open(filepath, 'r') as f:
+                            content = f.read()
+                            if pattern in content:
+                                matching_files.append(str(filepath.relative_to(self.workspace_path)))
+                    except:
+                        # Skip files that can't be read as text
+                        pass
+            
+            if not matching_files:
+                return f"No files containing '{pattern}' found in '{directory}'"
+            
+            result = f"Files containing '{pattern}':\n"
+            for i, file in enumerate(matching_files, 1):
+                result += f"{i}. {file}\n"
+            return result
+        except Exception as e:
+            self.logger.error(f"Error searching files: {e}", exc_info=True)
+            return f"Error searching files: {str(e)}"
+
+    def create_directory(self, directory: str) -> str:
+        """Create a directory"""
+        if not directory:
+            return "Error: No directory name provided"
+        
+        try:
+            dirpath = self.workspace_path / directory
+            dirpath.mkdir(parents=True, exist_ok=True)
+            return f"Directory '{directory}' created successfully"
+        except Exception as e:
+            self.logger.error(f"Error creating directory: {e}", exc_info=True)
+            return f"Error creating directory: {str(e)}"
+
+    def parse_instruction(self, instruction: str) -> Tuple[str, Dict[str, str]]:
+        """
+        Parse a natural language instruction to determine the operation and parameters
+        
+        Args:
+            instruction: Natural language instruction
+            
+        Returns:
+            Tuple of (operation_type, parameters)
+        """
+        instruction = instruction.lower()
+        params = {}
+        
+        # Create file
+        if "create file" in instruction:
+            # Extract filename
+            filename_match = re.search(r"create file (?:named|called)? ([^\s]+)", instruction)
+            if filename_match:
+                params["filename"] = filename_match.group(1)
+            
+            # Extract content
+            content_match = re.search(r"with (.*?)$", instruction)
+            if content_match:
+                params["content"] = content_match.group(1)
+            
+            return "create_file", params
+        
+        # Read file
+        elif "read file" in instruction:
+            filename_match = re.search(r"read file ([^\s]+)", instruction)
+            if filename_match:
+                params["filename"] = filename_match.group(1)
+            
+            return "read_file", params
+        
+        # Delete file
+        elif "delete file" in instruction:
+            filename_match = re.search(r"delete file ([^\s]+)", instruction)
+            if filename_match:
+                params["filename"] = filename_match.group(1)
+            
+            return "delete_file", params
+        
+        # List files
+        elif "list files" in instruction:
+            dir_match = re.search(r"list files (?:in|from) ([^\s]+)", instruction)
+            if dir_match:
+                params["directory"] = dir_match.group(1)
+            
+            return "list_files", params
+        
+        # Search files
+        elif "search files" in instruction:
+            pattern_match = re.search(r"search files (?:containing|with) ([^\s]+)", instruction)
+            if pattern_match:
+                params["pattern"] = pattern_match.group(1)
+            
+            dir_match = re.search(r"in ([^\s]+)", instruction)
+            if dir_match:
+                params["directory"] = dir_match.group(1)
+            
+            return "search_files", params
+        
+        # Create directory
+        elif "create directory" in instruction or "create folder" in instruction:
+            dir_match = re.search(r"create (?:directory|folder) ([^\s]+)", instruction)
+            if dir_match:
+                params["directory"] = dir_match.group(1)
+            
+            return "create_directory", params
+        
+        # Default to unknown operation
+        return "unknown", params 

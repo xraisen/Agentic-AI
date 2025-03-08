@@ -36,16 +36,23 @@ Welcome to Agentic AI, a powerful assistant that can help you perform file opera
 
 4. Run the application:
    ```bash
-   python src/main.py
+   python src/agentic_ai/main.py
    ```
 
 ## Getting Started
 
 When you first start Agentic AI, you'll see the main interface:
 
-- **Command Input**: At the bottom of the window, where you type your instructions
-- **Output Display**: The main area showing results and generated code
-- **Toolbar**: Contains useful buttons like "Change Workspace" and "Help"
+```
+==================================================
+             Agentic AI
+==================================================
+Type 'exit' or 'quit' to exit.
+Type 'help' for commands.
+==================================================
+```
+
+You can interact with the AI by typing commands after the "You:" prompt.
 
 ## Using Natural Language Commands
 
@@ -54,7 +61,13 @@ Agentic AI understands natural language commands for file operations. Here are s
 ### Creating Files
 
 ```
-create file named example.txt with Hello, World!
+You: create file named example.txt with Hello, World!
+
+Processing: create file named example.txt with Hello, World!
+Generating and executing code...
+
+Result:
+File 'example.txt' created successfully
 ```
 
 This will create a file named `example.txt` with the content "Hello, World!"
@@ -62,7 +75,13 @@ This will create a file named `example.txt` with the content "Hello, World!"
 ### Reading Files
 
 ```
-read file example.txt
+You: read file example.txt
+
+Processing: read file example.txt
+Generating and executing code...
+
+Result:
+Hello, World!
 ```
 
 This will display the contents of `example.txt`.
@@ -70,16 +89,20 @@ This will display the contents of `example.txt`.
 ### Listing Files
 
 ```
-list files in .
+You: list files in .
+
+Processing: list files in .
+Generating and executing code...
+
+Result:
+Files in '.':
+1. example.txt
+2. README.md
+3. config.json
+...
 ```
 
 This will list all files in the current directory.
-
-```
-list files in src
-```
-
-This will list all files in the `src` directory.
 
 ### Searching Files
 
@@ -141,13 +164,13 @@ For advanced users, Agentic AI also provides a command-line interface:
 
 ```bash
 # Start in interactive mode
-python src/main.py
+python src/agentic_ai/main.py
 
 # Execute a single command
-python src/main.py create file named test.txt with Hello World
+python src/agentic_ai/main.py create file named test.txt with Hello World
 
 # Specify a workspace directory
-python src/main.py --workspace /path/to/workspace
+python src/agentic_ai/main.py --workspace /path/to/workspace
 ```
 
 ## Troubleshooting

@@ -19,8 +19,25 @@ python -m venv .venv
 .\.venv\Scripts\activate  # On Windows
 source .venv/bin/activate  # On macOS/Linux
 pip install -r requirements.txt
-python src/main.py
+python src/agentic_ai/main.py
 ```
+
+## User Interface
+
+When you start Agentic AI, you'll see this interface:
+
+```
+==================================================
+             Agentic AI
+==================================================
+Type 'exit' or 'quit' to exit.
+Type 'help' for commands.
+==================================================
+
+You: 
+```
+
+Type your commands after the "You:" prompt.
 
 ## Basic Commands
 
@@ -29,13 +46,25 @@ Once the application is running, you can use these example commands:
 ### Create a file
 
 ```
-create file named example.txt with Hello, World!
+You: create file named example.txt with Hello, World!
+
+Processing: create file named example.txt with Hello, World!
+Generating and executing code...
+
+Result:
+File 'example.txt' created successfully
 ```
 
 ### Read a file
 
 ```
-read file example.txt
+You: read file example.txt
+
+Processing: read file example.txt
+Generating and executing code...
+
+Result:
+Hello, World!
 ```
 
 ### List files in a directory
@@ -64,9 +93,9 @@ create directory docs
 
 ## Tips
 
-- Type `help` in the command input for a list of example commands
-- Use the "Change Workspace" button to select where files will be created/modified
-- Check the generated code to understand what's happening behind the scenes
+- Type `help` to see available commands
+- Type `exit` or `quit` to exit the application
+- Type `clear` to clear the screen
 
 ## Next Steps
 
