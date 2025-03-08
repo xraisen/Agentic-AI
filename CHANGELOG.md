@@ -5,6 +5,36 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.2] - 2024-03-08
+
+### Fixed
+- API key validation and format checking
+- Configuration handling with consistent lowercase keys
+- Icon loading issues in Windows application build
+- Build script path handling and escaping
+- Chrome extension packaging and asset validation
+- Error messages for API connectivity issues
+
+### Added
+- Improved network retry logic with exponential backoff
+- Enhanced error handling with user-friendly messages
+- Better configuration validation
+- Expanded .gitignore to protect sensitive files
+- New README documentation for improved features
+
+### Changed
+- Standardized configuration format across all components
+- Simplified Windows build process for better reliability
+- Enhanced Chrome extension build with missing asset detection
+- Improved file path handling across platforms
+- Made error messages more specific and actionable
+
+### Security
+- Enhanced protection of API keys
+- Improved sensitive file exclusions in .gitignore
+- Better validation of configuration values
+- Secure handling of authentication credentials
+
 ## [1.0.1] - 2024-03-07
 
 ### Fixed

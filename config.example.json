@@ -1,11 +1,12 @@
 {
-    "OPENROUTER_API_KEY": "your-api-key-here",
-    "MODEL": "gemini-2.0-flash-thinking-experimental-01-21",
-    "SITE_URL": "https://github.com/xraisen/agentic-ai",
-    "SITE_NAME": "Agentic AI",
-    "LOG_LEVEL": "INFO",
-    "MAX_TOKENS": 1000,
-    "TEMPERATURE": 0.7,
-    "CACHE_DIR": "cache",
-    "ASSETS_DIR": "assets"
+    "api_key": "sk-or-v1-your-openrouter-api-key-here",
+    "model": "google/gemini-pro",
+    "site_url": "https://github.com/xraisen/agentic-ai",
+    "site_name": "Agentic AI",
+    "log_level": "INFO",
+    "max_tokens": 1000,
+    "temperature": 0.7,
+    "cache_dir": "cache",
+    "assets_dir": "assets",
+    "enable_logging": true
 } 

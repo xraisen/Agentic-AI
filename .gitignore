@@ -35,6 +35,8 @@ venv.bak/
 *.swp
 *.swo
 *~
+.cursor/
+.cursorignore
 
 # Logs
 logs/
@@ -66,6 +68,9 @@ build/
 *.msi
 *.zip
 *.tar.gz
+*.spec
+out/
+release/
 
 # Local development
 .env.local
@@ -98,3 +103,19 @@ config.json
 *.crt
 *.p12
 *.pfx
+/.cursor
+*_api_key*.txt
+*api_key*.json
+*secret*.json
+*credential*.json
+*token*.json
+*auth*.json
+*private*.json
+
+# Temporary files
+temp_*.txt
+*.bak
+*.tmp
+*~
+*.swp
+.DS_Store
