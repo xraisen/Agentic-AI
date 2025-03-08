@@ -16,6 +16,7 @@ Agentic AI is a powerful AI assistant that can interact with your file system, e
   - Firewall rule creation
   - Scheduled task management
   - Administrative privilege elevation
+- **Self-Aware Code Generation**: Uses natural language to generate and execute code for file manipulation
 - **Background Process Management**: Run and monitor long-running tasks in the background
 - **Robust Error Handling & Rollback**: Safely attempt operations with automatic rollback
 - **Conversation History**: Persistent conversation logging with search and retrieval
@@ -31,7 +32,8 @@ Agentic AI is built around several core components:
 2. **Permission Manager**: Tracks and enforces user-granted permissions
 3. **Conversation Logger**: Records and maintains conversation history
 4. **System Operations Manager**: Controls execution of system commands and Windows system manipulation
-5. **Agentic Core**: Integrates all components with the AI model
+5. **Code Generator**: Creates and executes Python code based on natural language instructions
+6. **Agentic Core**: Integrates all components with the AI model
 
 ## Installation
 
@@ -76,10 +78,17 @@ cp config.example.json config.json
 python src/main.py
 ```
 
-### Running the Demo
+### Running the CLI
 
 ```bash
-python examples/file_operations_demo.py
+# Start interactive mode
+python src/main.py
+
+# Execute a single command
+python src/main.py create file named test.txt with Hello World
+
+# Specify a workspace directory
+python src/main.py --workspace /path/to/workspace
 ```
 
 ### Building Windows Application
@@ -96,6 +105,32 @@ python build_windows.py --onefile
 
 # Create an installer
 python build_windows.py --installer
+```
+
+## Self-Aware File Manipulation
+
+Agentic AI features a self-aware code generation system that allows you to manipulate files using natural language commands. The system:
+
+1. Interprets your natural language instructions
+2. Generates Python code to perform the requested operation
+3. Executes the code in a secure sandbox
+4. Returns the results to you
+
+This approach:
+- Increases flexibility in handling file operations
+- Maintains security through code verification and sandboxing
+- Provides transparency by showing the generated code
+- Allows for iterative refinement and error correction
+
+Examples of file manipulation commands:
+
+```
+create file named example.txt with Hello, World!
+read file config.json
+list files in src
+search files containing import
+delete file test.txt
+create directory docs
 ```
 
 ## Windows System Manipulation Features
@@ -209,6 +244,8 @@ Agentic AI takes security seriously with multiple layers of protection:
 6. **Rollback Capability**: System changes can be rolled back when possible
 7. **Privilege Management**: Administrative tasks require explicit elevation
 8. **UI Confirmation**: All sensitive operations prompt the user through the UI
+9. **Code Sandboxing**: Generated code is executed in a secure sandbox
+10. **AST Analysis**: Code is analyzed for unsafe operations before execution
 
 ## Development
 
@@ -225,8 +262,12 @@ agentic-ai/
 │   ├── utils/                # Utility modules
 │   │   ├── file_system_interface.py # File system abstraction
 │   │   ├── permission_manager.py # Permission management
+│   │   ├── code_generator.py # Self-aware code generation
 │   │   ├── conversation_logger.py # Conversation history
 │   │   └── logger.py         # Logging utility
+│   ├── agentic_ai/           # Application modules
+│   │   ├── gui.py           # GUI implementation
+│   │   └── cli.py           # CLI implementation
 │   └── main.py               # Application entry point
 ├── tests/                    # Unit tests
 ├── examples/                 # Example applications

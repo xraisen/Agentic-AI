@@ -29,7 +29,7 @@ def get_version():
             return f.read().strip()
     except FileNotFoundError:
         # Default version if file not found
-        return "1.0.0"
+        return "1.1.0"
 
 def clean_build_dirs(root_dir):
     """Clean build directories"""
@@ -100,6 +100,48 @@ Filename: "{{app}}\\{{#MyAppExeName}}"; Description: "{{cm:LaunchProgram,{{#MyAp
     
     return script_path
 
+def ensure_directory_exists(path):
+    """Ensure a directory exists, creating it if necessary"""
+    if not os.path.exists(path):
+        os.makedirs(path)
+
+def create_empty_init_files(root_dir):
+    """Create empty __init__.py files in directories that might need them"""
+    dirs_needing_init = [
+        "src/utils",
+        "src/core",
+        "src/agentic_ai"
+    ]
+    
+    for dir_path in dirs_needing_init:
+        init_file = os.path.join(root_dir, dir_path, "__init__.py")
+        if not os.path.exists(init_file):
+            with open(init_file, "a") as f:
+                # Create an empty file
+                pass
+            print(f"Created: {init_file}")
+
+def ensure_config_directories(root_dir):
+    """Ensure necessary config directories exist"""
+    paths = [
+        "config",
+        "logs",
+        "assets"
+    ]
+    
+    for path in paths:
+        full_path = os.path.join(root_dir, path)
+        if not os.path.exists(full_path):
+            os.makedirs(full_path)
+            print(f"Created directory: {full_path}")
+    
+    # Create an empty config file if it doesn't exist
+    config_file = os.path.join(root_dir, "config", "permissions.json")
+    if not os.path.exists(config_file):
+        with open(config_file, "w") as f:
+            f.write('{"permissions": []}')
+        print(f"Created empty permissions file: {config_file}")
+
 def build_executable(args, root_dir, version):
     """Build the Windows executable"""
     print(f"Building Windows application v{version}...")
@@ -107,6 +149,10 @@ def build_executable(args, root_dir, version):
     # Ensure the release directory exists
     release_dir = root_dir / 'release' / 'windows'
     release_dir.mkdir(parents=True, exist_ok=True)
+    
+    # Ensure all required directories exist with __init__.py files
+    create_empty_init_files(root_dir)
+    ensure_config_directories(root_dir)
     
     # Base PyInstaller command
     pyinstaller_args = [
@@ -117,6 +163,17 @@ def build_executable(args, root_dir, version):
         '--name=agentic-ai',  # Name of the output file
         '--add-data=assets;assets',  # Include assets folder
         '--add-data=config;config',  # Include config folder
+        '--hidden-import=src.utils.code_generator',  # Include selfaware implementation
+        '--hidden-import=src.agentic_ai.gui',
+        '--hidden-import=src.agentic_ai.cli',
+        '--hidden-import=src.utils.permission_manager',
+        '--hidden-import=src.utils.file_system_interface',
+        '--hidden-import=src.utils.logger',
+        '--hidden-import=tkinter',
+        '--hidden-import=tkinter.ttk',
+        '--hidden-import=tkinter.scrolledtext',
+        '--hidden-import=tkinter.filedialog',
+        '--hidden-import=tkinter.messagebox',
     ]
     
     # Add icon if it exists
@@ -192,6 +249,13 @@ def build_executable(args, root_dir, version):
             f.write(f"- One file mode: {'Yes' if args.onefile else 'No'}\r\n")
             f.write(f"- Console mode: {'Yes' if args.console else 'No'}\r\n\r\n")
             f.write(f"To run the application, use run.bat or directly execute agentic-ai.exe\r\n")
+            f.write(f"\r\nFile Manipulation Capabilities:\r\n")
+            f.write(f"- Create and edit files with natural language commands\r\n")
+            f.write(f"- Read file contents\r\n")
+            f.write(f"- List files in directories\r\n")
+            f.write(f"- Search for files containing specific text\r\n")
+            f.write(f"- Create directories\r\n")
+            f.write(f"- Delete files\r\n")
         
         print(f"Created README: {release_dir / 'README.txt'}")
         

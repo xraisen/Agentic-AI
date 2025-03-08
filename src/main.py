@@ -6,6 +6,7 @@ Agentic AI - Main Application Entry Point
 import os
 import sys
 import logging
+import traceback
 from pathlib import Path
 
 # Add the project root to the Python path
@@ -29,6 +30,12 @@ logging.basicConfig(
 # Create logger
 logger = logging.getLogger(__name__)
 
+def wait_on_error():
+    """Wait for user input before closing the console window on error"""
+    if sys.stdout and sys.stdin and sys.stderr and all(hasattr(f, 'isatty') and f.isatty() for f in [sys.stdout, sys.stdin, sys.stderr]):
+        print("\nPress Enter to exit...")
+        input()
+
 def main():
     """Main entry point for the application"""
     try:
@@ -38,16 +45,20 @@ def main():
         from src.agentic_ai.main import main as app_main
         
         # Run the application
-        sys.exit(app_main(sys.argv[1:]))
+        return app_main(sys.argv[1:])
         
     except ImportError as e:
         logger.error(f"Import error: {e}")
         print(f"Error: {e}")
         print("This could be due to missing dependencies. Try running 'pip install -r requirements.txt'")
+        wait_on_error()
         return 1
     except Exception as e:
         logger.error(f"Application error: {e}", exc_info=True)
         print(f"Error: {e}")
+        print("\nDetailed error information:")
+        traceback.print_exc()
+        wait_on_error()
         return 1
 
 if __name__ == "__main__":
