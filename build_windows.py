@@ -207,28 +207,60 @@ def build_executable(args, root_dir, version):
         subprocess.run(pyinstaller_args, check=True)
         
         # Copy the executable to the release directory
-        if args.onefile:
-            # For --onefile mode
-            exe_path = root_dir / 'dist' / 'agentic-ai.exe'
-            if exe_path.exists():
-                shutil.copy2(exe_path, release_dir / 'agentic-ai.exe')
-                print(f"Copied executable to {release_dir / 'agentic-ai.exe'}")
+        try:
+            if args.onefile:
+                # For --onefile mode
+                exe_path = root_dir / 'dist' / 'agentic-ai.exe'
+                if exe_path.exists():
+                    # Make sure the destination doesn't exist or is writable
+                    dest_path = release_dir / 'agentic-ai.exe'
+                    if dest_path.exists():
+                        try:
+                            # Try to remove the file first
+                            os.remove(dest_path)
+                            print(f"Removed existing file: {dest_path}")
+                        except PermissionError:
+                            print(f"Warning: Cannot remove existing file due to permissions: {dest_path}")
+                            print("Skipping copy to release directory.")
+                            return
+                        except Exception as e:
+                            print(f"Warning: Error removing existing file: {e}")
+                            print("Skipping copy to release directory.")
+                            return
+                    
+                    shutil.copy2(exe_path, dest_path)
+                    print(f"Copied executable to {dest_path}")
+                else:
+                    print(f"Warning: Executable not found at {exe_path}")
             else:
-                print(f"Warning: Executable not found at {exe_path}")
-        else:
-            # For --onedir mode, copy the entire directory
-            dist_dir = root_dir / 'dist' / 'agentic-ai'
-            if dist_dir.exists():
-                # Remove existing release directory if it exists
-                release_exe_dir = release_dir / 'agentic-ai'
-                if release_exe_dir.exists():
-                    shutil.rmtree(release_exe_dir)
-                
-                # Copy the entire directory
-                shutil.copytree(dist_dir, release_exe_dir)
-                print(f"Copied application folder to {release_exe_dir}")
-            else:
-                print(f"Warning: Application directory not found at {dist_dir}")
+                # For --onedir mode, copy the entire directory
+                dist_dir = root_dir / 'dist' / 'agentic-ai'
+                if dist_dir.exists():
+                    # Remove existing release directory if it exists
+                    release_exe_dir = release_dir / 'agentic-ai'
+                    if release_exe_dir.exists():
+                        try:
+                            # Try to remove the directory first
+                            shutil.rmtree(release_exe_dir, ignore_errors=True)
+                            print(f"Removed existing directory: {release_exe_dir}")
+                        except PermissionError:
+                            print(f"Warning: Cannot remove existing directory due to permissions: {release_exe_dir}")
+                            print("Skipping copy to release directory.")
+                            return
+                        except Exception as e:
+                            print(f"Warning: Error removing existing directory: {e}")
+                            print("Skipping copy to release directory.")
+                            return
+                    
+                    # Copy the entire directory
+                    shutil.copytree(dist_dir, release_exe_dir)
+                    print(f"Copied application folder to {release_exe_dir}")
+                else:
+                    print(f"Warning: Application directory not found at {dist_dir}")
+        except Exception as e:
+            print(f"Unexpected error during copy operation: {e}")
+            print("Build completed, but files were not copied to the release directory.")
+            return
         
         # Create a launcher batch file
         with open(release_dir / 'run.bat', 'w') as f:
