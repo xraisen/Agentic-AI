@@ -46,7 +46,7 @@ Agentic AI is built around several core components:
 
 1. Clone this repository:
 ```bash
-git clone https://github.com/yourusername/agentic-ai.git
+git clone https://github.com/xraisen/agentic-ai.git
 cd agentic-ai
 ```
 
